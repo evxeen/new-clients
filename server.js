@@ -65,11 +65,17 @@ app.post('/api/clients', (req, res) => {
 
 // 📌 Обновить данные клиента
 app.put('/api/clients/:id', (req, res) => {
-  const client = clients.find((c) => c.id === parseInt(req.params.id));
-  if (!client) return res.status(404).json({ error: 'Client not found' });
+  const clientId = Number(req.params.id);
+  const updatedData = req.body;
 
-  Object.assign(client, req.body);
-  res.json(client);
+  const clientIndex = clients.findIndex((c) => c.id === clientId);
+  if (clientIndex === -1) return res.status(404).json({ message: 'Клиент не найден' });
+
+  // сохраняем историю, заменяем остальное
+  const oldHistory = clients[clientIndex].history || [];
+  clients[clientIndex] = { ...updatedData, id: clientId, history: oldHistory };
+
+  res.json(clients[clientIndex]);
 });
 
 // 📌 Добавить запись в историю клиента
