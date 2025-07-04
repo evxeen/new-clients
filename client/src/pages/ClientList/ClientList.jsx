@@ -28,14 +28,17 @@ function ClientList() {
 
         <div className={styles.listContainer}>
             {clients.map((client) => (
-                <div key={client.id} className={styles.clientBlock}>
+                <Link
+                    key={client.id}
+                    to={`/client/${client.id}`}
+                    className={styles.clientBlock} // Прямо на Link
+                >
                     <div className={styles.clientHeader}>
                         <h3>{client.company}</h3>
                     </div>
                     <p>Менеджер: {client.manager}</p>
                     <p>Статус: {client.status}</p>
-                    {/*<Link to={`/client/${client.id}`}>Подробнее</Link>*/}
-                </div>
+                </Link>
             ))}
         </div>
 

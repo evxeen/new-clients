@@ -27,8 +27,6 @@ app.get('/api/clients', (req, res) => {
   }
 });
 
-
-
 // // 📌 Получить одного клиента по ID
 // app.get('/api/clients/:id', (req, res) => {
 //   const client = clients.find((c) => c.id === parseInt(req.params.id));
@@ -49,6 +47,7 @@ app.post('/api/clients', (req, res) => {
     phone,
     director,
     authority,
+    manager,
   } = req.body;
 
   const newClient = {
@@ -64,6 +63,7 @@ app.post('/api/clients', (req, res) => {
     phone,
     director,
     authority,
+    manager,
     status: 'Установление контакта',
     contacts: [
       {post: null, phone: null, email: null}

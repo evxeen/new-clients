@@ -13,6 +13,7 @@ function AddClientForm({ closeForm }) {
     const [phone, setPhone] = useState('');
     const [director, setDirector] = useState('');
     const [authority, setAuthority] = useState('');
+    const [manager, setManager] = useState('');
 
     const productOptions = [
         "Гвозди", "Болты", "Винты", "Гайки", "Шпильки",
@@ -35,6 +36,7 @@ function AddClientForm({ closeForm }) {
             phone,
             director,
             authority,
+            manager,
             history: []
         };
 
@@ -108,9 +110,15 @@ function AddClientForm({ closeForm }) {
                            onChange={e => setDirector(e.target.value)}/>
                     <input placeholder="Основание полномочий" value={authority}
                            onChange={e => setAuthority(e.target.value)}/>
+                    <select value={manager} onChange={e => setManager(e.target.value) }>
+                        <option value="" disabled selected>Выберите вариант</option>
+                        <option value="Иван Иванов">Иван Иванов</option>
+                        <option value="Михаил Петров">Михаил Петров</option>
+                        <option value="Мария Лелина">Мария Лелина</option>
+                    </select>
 
                     <div className={styles.buttons}>
-                        <button type="submit" >Добавить</button>
+                    <button type="submit" >Добавить</button>
                         <button type="button" onClick={() => closeForm(false)}>Отменить</button>
                     </div>
 
