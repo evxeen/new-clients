@@ -10,7 +10,7 @@ function ClientList() {
   useEffect(() => {
     fetch('/api/clients')
       .then((res) => res.json())
-      .then((data) => setClients(data))
+      .then((data) => setClients(data.reverse()))
       .catch((err) => console.error('Ошибка загрузки клиентов:', err));
   }, []);
 
@@ -19,20 +19,26 @@ function ClientList() {
   }
 
   return (
-    <div>
+    <div className={styles.containerContent}>
         {formIsOpen ? <AddClientForm closeForm={toggleForm}/> : ''}
 
         <div className={styles.header}>
             <button className={styles.addButton} onClick={() => toggleForm(true)}>Добавить</button>
         </div>
-        {clients.map((client) => (
-        <div key={client.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
-          <h3>{client.company}</h3>
-          <p>Менеджер: {client.manager}</p>
-          <p>Статус: {client.status}</p>
-          <Link to={`/client/${client.id}`}>Подробнее</Link>
+
+        <div className={styles.listContainer}>
+            {clients.map((client) => (
+                <div key={client.id} className={styles.clientBlock}>
+                    <div className={styles.clientHeader}>
+                        <h3>{client.company}</h3>
+                    </div>
+                    <p>Менеджер: {client.manager}</p>
+                    <p>Статус: {client.status}</p>
+                    {/*<Link to={`/client/${client.id}`}>Подробнее</Link>*/}
+                </div>
+            ))}
         </div>
-      ))}
+
     </div>
   );
 }
