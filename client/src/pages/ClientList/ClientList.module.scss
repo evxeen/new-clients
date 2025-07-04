@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+
+  .addButton {
+    width: 150px;
+    height: 40px;
+    font-size: 20px;
+    background-color: #788fa8;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: white;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0e56af;
+    }
+  }
+}

@@ -24,3 +24,5 @@ yarn-error.log*
 # Other temporary files
 tmp/
 temp/
+
+db.json

@@ -1,0 +1,89 @@
+.overlay {  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* затемнение */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+
+  .addForm {
+    width: 30%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    background-color: white;
+    border-radius: 10px;
+
+    .fieldsBlock {
+      height: 80vh;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      margin: 40px 40px ;
+
+      input {
+        height: 4vh;
+        font-size: 20px;
+        padding-left: 10px;
+      }
+
+      .checkboxGroup {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px; /* промежуток между лейблами */
+
+        label {
+          display: flex;
+          align-items: center;
+          margin: 0; /* оставляем без внешних отступов, gap сработает */
+        }
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        button:first-of-type {
+          width: 200px;
+          height: 40px;
+          font-size: 20px;
+          background-color: #788fa8;
+          border: none;
+          outline: none;
+          border-radius: 10px;
+          color: white;
+          transition: background-color 0.3s ease;
+          &:hover {
+            background-color: #0e56af;
+          }
+        }
+
+        button:last-of-type {
+          width: 200px;
+          height: 40px;
+          font-size: 20px;
+          background-color: #a85b5b;
+          border: none;
+          outline: none;
+          border-radius: 10px;
+          color: white;
+          transition: background-color 0.3s ease;
+          &:hover {
+            background-color: #a13b3b;
+          }
+        }
+      }
+
+    }
+
+  }
+
+}
+
+
+
+

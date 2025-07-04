@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 function ClientDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [client, setClient] = useState(null);
   const [note, setNote] = useState('');
   const [editedClient, setEditedClient] = useState(null);
+
 
   useEffect(() => {
     fetch('/api/clients')
@@ -14,6 +16,7 @@ function ClientDetail() {
         const found = data.find((c) => c.id === Number(id));
         setClient(found);
         setEditedClient(found); // Создаём копию для редактирования
+          console.log(found)
       })
       .catch((err) => console.error('Ошибка загрузки клиента:', err));
   }, [id]);
@@ -53,76 +56,107 @@ function ClientDetail() {
     }
   };
 
+    const handleDelete = async () => {
+        const confirmed = window.confirm('Вы уверены, что хотите удалить этого клиента?');
+        if (!confirmed) return;
+
+        try {
+            const res = await fetch(`/api/clients/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                alert('Клиент удалён');
+                navigate('/'); // перенаправляем на главную
+            } else {
+                alert('Ошибка при удалении');
+            }
+        } catch (err) {
+            console.error('Ошибка при удалении клиента:', err);
+        }
+    };
+
   if (!editedClient) return <div>Клиент не найден</div>;
 
   return (
-    <div>
-      <Link to="/">← Назад</Link>
-      <h2>
-        <input
-          value={editedClient.company}
-          onChange={(e) => handleChange('company', e.target.value)}
-        />
-      </h2>
+      <div>
+          <Link to="/">← Назад</Link>
+          <h2>
+              <input
+                  value={editedClient.company}
+                  onChange={(e) => handleChange('company', e.target.value)}
+              />
+          </h2>
 
-      <p>
-        <strong>Менеджер:</strong>
-        <input
-          value={editedClient.manager}
-          onChange={(e) => handleChange('manager', e.target.value)}
-        />
-      </p>
-      <p>
-        <strong>Статус:</strong>
-        <input
-          value={editedClient.status}
-          onChange={(e) => handleChange('status', e.target.value)}
-        />
-      </p>
-      <p>
-        <strong>Email:</strong>
-        <input value={editedClient.email} onChange={(e) => handleChange('email', e.target.value)} />
-      </p>
-      <p>
-        <strong>Телефон:</strong>
-        <input value={editedClient.phone} onChange={(e) => handleChange('phone', e.target.value)} />
-      </p>
-      <p>
-        <strong>Представитель:</strong>
-        <input
-          value={editedClient.representative}
-          onChange={(e) => handleChange('representative', e.target.value)}
-        />
-      </p>
+          <p>
+              <strong>Менеджер:</strong>
+              <input
+                  value={editedClient.manager}
+                  onChange={(e) => handleChange('manager', e.target.value)}
+              />
+          </p>
+          <p>
+              <strong>Статус:</strong>
+              <select
+                  value={editedClient.status}
+                  onChange={(e) => handleChange('status', e.target.value)}
+              >
+                  <option value="Статус 1">Статус 1</option>
+                  <option value="Статус 2">Статус 2</option>
+                  <option value="Статус 3">Статус 3</option>
+                  <option value="Статус 4">Статус 4</option>
+                  <option value="Статус 5">Статус 5</option>
+              </select>
+          </p>
+          <p>
+              <strong>Email:</strong>
+              <input value={editedClient.email} onChange={(e) => handleChange('email', e.target.value)}/>
+          </p>
+          <p>
+              <strong>Телефон:</strong>
+              <input value={editedClient.phone} onChange={(e) => handleChange('phone', e.target.value)}/>
+          </p>
+          <p>
+              <strong>Представитель:</strong>
+              <input
+                  value={editedClient.representative}
+                  onChange={(e) => handleChange('representative', e.target.value)}
+              />
+          </p>
 
-      <button onClick={handleSave}>💾 Сохранить</button>
+          <button onClick={handleSave}>💾 Сохранить</button>
 
-      <h3>История:</h3>
-      {client.history?.length > 0 ? (
-        <ul>
-          {client.history.map((entry, index) => (
-            <li key={index}>
-              <strong>{entry.date}:</strong> {entry.note}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>История пока пуста</p>
-      )}
+          <h3>История:</h3>
+          {client.history?.length > 0 ? (
+              <ul>
+                  {client.history.map((entry, index) => (
+                      <li key={index}>
+                          <strong>{entry.date}:</strong> {entry.note}
+                      </li>
+                  ))}
+              </ul>
+          ) : (
+              <p>История пока пуста</p>
+          )}
 
-      <div style={{ marginTop: '1em' }}>
+          <div style={{marginTop: '1em'}}>
         <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          rows={3}
-          placeholder="Добавьте заметку..."
-          style={{ width: '100%', padding: '8px' }}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows={3}
+            placeholder="Добавьте заметку..."
+            style={{width: '100%', padding: '8px'}}
         />
-        <button onClick={handleAddNote} style={{ marginTop: '0.5em' }}>
-          Добавить запись
-        </button>
+              <button onClick={handleAddNote} style={{marginTop: '0.5em'}}>
+                  Добавить запись
+              </button>
+          </div>
+
+          <button style={{marginTop: '20px', color: 'white', background: 'red', padding: '8px 16px'}}
+                  onClick={handleDelete}>
+              Удалить клиента
+          </button>
       </div>
-    </div>
   );
 }
 
