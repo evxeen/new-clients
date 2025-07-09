@@ -1,18 +1,29 @@
 .wrapper {
   padding: 20px;
   width: 100%;
-  max-width: 80%; // ограничим ширину
-  margin: 0 auto; // выровняет wrapper по центру экрана
+  max-width: 80%;
+  margin: 0 auto;
 }
 
 .backLink {
-  display: inline-block;
-  margin-bottom: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #788fa8;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: white;
+  transition: background-color 0.3s ease;
   text-decoration: none;
-  color: #007bff;
+  margin-bottom: 40px;
 
   &:hover {
-    text-decoration: underline;
+    background-color: #0e56af;
   }
 }
 
@@ -23,7 +34,7 @@
 
   a {
     text-decoration: none;
-    color: #333;
+    color: #788fa8;
     padding-bottom: 4px;
 
     &:hover {
@@ -32,14 +43,14 @@
   }
 
   .active {
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid #0e56af;
     font-weight: bold;
-    color: #007bff;
+    color: #0e56af;
   }
 }
 
 .content {
   border-top: 1px solid #ddd;
   padding-top: 20px;
-  text-align: center; // если хочешь, чтобы содержимое тоже было по центру
+  text-align: center;
 }
