@@ -8,10 +8,10 @@ function ClientContacts() {
     return (
         <div className={styles.container}>
             <div className={styles.list}>
-                <p><strong>Юридический адрес:</strong> {client.company}</p>
-                <p><strong>Сайт компании:</strong> {client.code}</p>
-                <p><strong>Электронная почта компании:</strong> {client.director}</p>
-                <p><strong>Номер телефона компании:</strong> {client.authority}</p>
+                <p><strong>Юридический адрес:</strong> {client.address}</p>
+                <p><strong>Сайт компании:</strong> {client.site}</p>
+                <p><strong>Электронная почта компании:</strong> {client.email}</p>
+                <p><strong>Номер телефона компании:</strong> {client.phone}</p>
                 <p><strong>Менеджеры:</strong></p>
                 <div className={styles.managersList}>
                     {client.contacts.map(contact => (

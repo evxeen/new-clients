@@ -37,6 +37,8 @@ function ClientDetail() {
                          className={({isActive}) => isActive ? styles.active : ''}>История</NavLink>
                 <NavLink to={`/client/${id}/contacts`}
                          className={({isActive}) => isActive ? styles.active : ''}>Контакты</NavLink>
+                <NavLink to={`/client/${id}/edit`}
+                         className={({isActive}) => isActive ? styles.active : ''}>Редактирование</NavLink>
             </nav>
 
             <div className={styles.content}>

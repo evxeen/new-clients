@@ -165,54 +165,37 @@ app.post('/api/clients/:id/history', (req, res) => {
   });
 });
 
-// 📌 Обновить данные клиента
-// app.put('/api/clients/:id', (req, res) => {
-//   const clientId = Number(req.params.id);
-//   const updatedData = req.body;
-//
-//   const clientIndex = clients.findIndex((c) => c.id === clientId);
-//   if (clientIndex === -1) return res.status(404).json({ message: 'Клиент не найден' });
-//
-//   // сохраняем историю, заменяем остальное
-//   const oldHistory = clients[clientIndex].history || [];
-//   clients[clientIndex] = { ...updatedData, id: clientId, history: oldHistory };
-//
-//   res.json(clients[clientIndex]);
-// });
-//
-// // 📌 удаление клиента
-// app.delete('/api/clients/:id', (req, res) => {
-//   const id = parseInt(req.params.id);
-//   const index = clients.findIndex(client => client.id === id);
-//   if (index !== -1) {
-//     clients.splice(index, 1);
-//     res.sendStatus(200);
-//   } else {
-//     res.status(404).json({ error: 'Клиент не найден' });
-//   }
-// });
-//
-//
-// // 📌 Добавить запись в историю клиента
-// app.post('/api/clients/:id/history', (req, res) => {
-//   const clientId = Number(req.params.id);
-//   const { note } = req.body;
-//   const client = clients.find((c) => c.id === clientId);
-//
-//   if (!client) {
-//     return res.status(404).json({ message: 'Клиент не найден' });
-//   }
-//
-//   if (!client.history) {
-//     client.history = [];
-//   }
-//
-//   const date = new Date().toISOString().replace('T', ' ').substring(0, 16); // "2025-06-27 21:45"
-//   client.history.push({ date, note });
-//
-//   res.status(201).json({ message: 'Запись добавлена', history: client.history });
-// });
-//
+// 📌 Обновить клиента по ID
+app.put('/api/clients/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const updatedData = req.body;
+
+  if (!fs.existsSync(DB_PATH)) {
+    return res.status(404).json({ error: 'База данных не найдена' });
+  }
+
+  fs.readFile(DB_PATH, 'utf-8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Ошибка чтения базы данных' });
+
+    let clients;
+    try {
+      clients = JSON.parse(data);
+    } catch (parseErr) {
+      return res.status(500).json({ error: 'Ошибка парсинга данных' });
+    }
+
+    const index = clients.findIndex(c => c.id === id);
+    if (index === -1) return res.status(404).json({ error: 'Клиент не найден' });
+
+    clients[index] = { ...clients[index], ...updatedData };
+
+    fs.writeFile(DB_PATH, JSON.stringify(clients, null, 2), 'utf-8', (writeErr) => {
+      if (writeErr) return res.status(500).json({ error: 'Ошибка записи' });
+
+      res.json(clients[index]);
+    });
+  });
+});
 
 // 📦 Отдача статики
 app.use(express.static(path.join(__dirname, 'client', 'dist')));

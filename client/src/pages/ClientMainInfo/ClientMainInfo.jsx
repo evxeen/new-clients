@@ -12,7 +12,7 @@ function ClientMainInfo() {
                 <p><strong>ИНН:</strong> {client.code}</p>
                 <p><strong>Директор:</strong> {client.director}</p>
                 <p><strong>Основание полномочий:</strong> {client.authority}</p>
-                <p><strong>Заявленный объем:</strong> {client.authority}</p>
+                <p><strong>Заявленный объем:</strong> {client.volume}</p>
                 <p><strong>Менеджер:</strong> {client.manager}</p>
             </div>
         </div>

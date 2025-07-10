@@ -1,6 +1,7 @@
 import React from 'react';
-import {useOutletContext} from "react-router-dom";
 import styles from "./ClientHistory.module.scss";
+
+import {useOutletContext} from "react-router-dom";
 import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
 
 function ClientHistory() {

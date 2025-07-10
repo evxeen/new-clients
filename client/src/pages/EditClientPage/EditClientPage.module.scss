@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+}
+
+h2 {
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.field label {
+  width: 200px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.field input {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 14px;
+  border-radius: 10px;
+  //border: none;
+  border: 1px solid black;
+}
+
+button {
+  margin-top: 20px;
+  width: 125px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #788fa8;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: white;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0e56af;
+  }
+}
