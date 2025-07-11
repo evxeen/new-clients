@@ -11,7 +11,7 @@ function ClientHistory() {
     return (
 
         <div className={styles.container}>
-            <AddHistoryForm clientId={client.id}/>
+            <AddHistoryForm clientId={client.id} />
             {reversed.map(el => (
                 <div key={el.message} className={styles.story}>
                     <p className={styles.storyDate}>{el.date}</p>

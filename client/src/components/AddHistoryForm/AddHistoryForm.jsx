@@ -52,13 +52,16 @@ function AddHistoryForm({ clientId }) {
                     ))}
                 </select>
 
-                <select value={typeOfConnection} onChange={(e) => setTypeOfConnection(e.target.value)}>
-                    <option value="по телефону">по телефону</option>
-                    <option value="по электронной почте">по электронной почте</option>
-                </select>
+            <select value={typeOfConnection} onChange={(e) => setTypeOfConnection(e.target.value)}>
+                <option value="по телефону">по телефону</option>
+                <option value="эл.почта">эл.почта</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Очная встреча">Очная встреча</option>
+            </select>
 
             {status && (
-                    <select value={result} onChange={(e) => setResult(e.target.value)} required>
+                <select value={result} onChange={(e) => setResult(e.target.value)} required>
                         <option value="" disabled>Выберите результат</option>
                         {statusOptions[status].map((r) => (
                             <option key={r} value={r}>{r}</option>

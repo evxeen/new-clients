@@ -6,6 +6,7 @@ import AddClientForm from "../../components/AddClientForm/AddClientForm.jsx";
 function ClientList() {
   const [clients, setClients] = useState([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch('/api/clients')
@@ -23,23 +24,34 @@ function ClientList() {
         {formIsOpen ? <AddClientForm closeForm={toggleForm}/> : ''}
 
         <div className={styles.header}>
+            <input
+                type="text"
+                placeholder="Поиск по названию компании..."
+                className={styles.searchInput}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <button className={styles.addButton} onClick={() => toggleForm(true)}>Добавить</button>
         </div>
 
         <div className={styles.listContainer}>
-            {clients.map((client) => (
-                <Link
-                    key={client.id}
-                    to={`/client/${client.id}`}
-                    className={styles.clientBlock} // Прямо на Link
-                >
-                    <div className={styles.clientHeader}>
-                        <h3>{client.company}</h3>
-                    </div>
-                    <p>Менеджер: {client.manager}</p>
-                    <p>Статус: {client.status}</p>
-                </Link>
-            ))}
+            {clients
+                .filter(client =>
+                    client.company.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(client => (
+                    <Link
+                        key={client.id}
+                        to={`/client/${client.id}`}
+                        className={styles.clientBlock}
+                    >
+                        <div className={styles.clientHeader}>
+                            <h3>{client.company}</h3>
+                        </div>
+                        <p>Менеджер: {client.manager}</p>
+                        <p>Статус: {client.status}</p>
+                    </Link>
+                ))}
         </div>
 
     </div>

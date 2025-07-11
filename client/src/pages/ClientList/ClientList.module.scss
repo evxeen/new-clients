@@ -5,9 +5,9 @@
   align-items: center;
 
   .header {
-    width: 100%;
+    width: 75%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-bottom: 50px;
 
     .addButton {
@@ -24,6 +24,16 @@
       &:hover {
         background-color: #0e56af;
       }
+    }
+
+    .searchInput {
+      padding: 8px 12px;
+      margin: 1rem 0;
+      width: 100%;
+      max-width: 400px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
   }
 

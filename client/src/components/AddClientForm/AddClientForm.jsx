@@ -17,7 +17,7 @@ function AddClientForm({ closeForm }) {
 
     const productOptions = [
         "Гвозди", "Болты", "Винты", "Гайки", "Шпильки",
-        "Саморезы", "Шурупы", "Заклепки", "Оси", "Шплинты", "Проволока"
+        "Саморезы", "Шурупы", "Заклепки", "Оси", "Шплинты", "Проволока", "др."
     ];
 
     const handleSubmit = async (e) => {
@@ -98,7 +98,7 @@ function AddClientForm({ closeForm }) {
                         ))}
                     </div>
 
-                    <input placeholder="Заявленный объем" value={volume} onChange={e => setVolume(e.target.value)}/>
+                    <input placeholder="Заявленный объем (в месяц)" value={volume} onChange={e => setVolume(e.target.value)}/>
                     <input placeholder="ИНН" value={code} onChange={e => setCode(e.target.value)}/>
                     <input placeholder="Юридический адрес" value={address} onChange={e => setAddress(e.target.value)}/>
                     <input placeholder="Сайт компании" value={site} onChange={e => setSite(e.target.value)}/>

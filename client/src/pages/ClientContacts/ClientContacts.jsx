@@ -64,12 +64,30 @@ function ClientContacts() {
                             <p>Телефон: {contact.phone || '—'}</p>
                             <p>Email: {contact.email || '—'}</p>
                         </div>
+
                     )) : 'Список пуст '}
+                    {/*<button onClick={() => setShowModal(true)}>Добавить контакт</button>*/}
+                    <div
+                        className={styles.addIcon}
+                        onClick={() => setShowModal(true)}
+                        title="Добавить контакт"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={styles.icon}
+                            viewBox="0 0 24 24"
+                        >
+                            <g fill="none" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" d="M12 8v4m0 0v4m0-4h4m-4 0H8"/>
+                                <circle cx="12" cy="12" r="10"/>
+                            </g>
+                        </svg>
+                    </div>
+
                 </div>
             </div>
 
             {showModal ? <AddContactForm onSubmit={handleAddContact} onClose={setShowModal}/> : ''}
-            <button onClick={() => setShowModal(true) }>Добавить контакт</button>
         </div>
     );
 }
