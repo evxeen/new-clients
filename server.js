@@ -94,9 +94,7 @@ app.post('/api/clients', (req, res) => {
     city: 'Подольск',
     suppliers: [],
     status: 'Установление контакта',
-    contacts: [
-      {name: '', lastName: '', post: null, phone: null, email: null}
-    ],
+    contacts: [],
     history: []
   };
 
@@ -193,6 +191,81 @@ app.put('/api/clients/:id', (req, res) => {
       if (writeErr) return res.status(500).json({ error: 'Ошибка записи' });
 
       res.json(clients[index]);
+    });
+  });
+});
+
+// ✅ Обновить основного контактного лица клиента
+app.put('/api/clients/:id/main-contact', (req, res) => {
+  const clientId = Number(req.params.id);
+  const { mainIndex } = req.body;
+
+  fs.readFile(DB_PATH, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Ошибка чтения файла:', err);
+      return res.status(500).json({ message: 'Ошибка чтения базы данных' });
+    }
+
+    let clients;
+    try {
+      clients = JSON.parse(data);
+    } catch (parseErr) {
+      console.error('Ошибка парсинга JSON:', parseErr);
+      return res.status(500).json({ message: 'Ошибка чтения базы данных' });
+    }
+
+    const clientIndex = clients.findIndex(c => c.id === clientId);
+    if (clientIndex === -1) {
+      return res.status(404).json({ message: 'Клиент не найден' });
+    }
+
+    const client = clients[clientIndex];
+
+    if (!Array.isArray(client.contacts)) {
+      return res.status(400).json({ message: 'Контактные лица отсутствуют' });
+    }
+
+    // Обновляем флаг isMain
+    client.contacts = client.contacts.map((contact, i) => ({
+      ...contact,
+      isMain: i === mainIndex
+    }));
+
+    // Сохраняем обновлённый массив обратно
+    fs.writeFile(DB_PATH, JSON.stringify(clients, null, 2), 'utf-8', (writeErr) => {
+      if (writeErr) {
+        console.error('Ошибка записи:', writeErr);
+        return res.status(500).json({ message: 'Ошибка сохранения данных' });
+      }
+
+      res.json(client); // возвращаем обновлённого клиента
+    });
+  });
+});
+
+app.post('/api/clients/:id/contacts', (req, res) => {
+  const clientId = Number(req.params.id);
+  const newContact = req.body;
+
+  fs.readFile(DB_PATH, 'utf-8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Ошибка чтения файла' });
+
+    let clients;
+    try {
+      clients = JSON.parse(data);
+    } catch (parseErr) {
+      return res.status(500).json({ error: 'Ошибка парсинга' });
+    }
+
+    const clientIndex = clients.findIndex(c => c.id === clientId);
+    if (clientIndex === -1) return res.status(404).json({ error: 'Клиент не найден' });
+
+    // По умолчанию isMain = false
+    clients[clientIndex].contacts.push({ ...newContact, isMain: false });
+
+    fs.writeFile(DB_PATH, JSON.stringify(clients, null, 2), err => {
+      if (err) return res.status(500).json({ error: 'Ошибка записи' });
+      res.json(clients[clientIndex]);
     });
   });
 });

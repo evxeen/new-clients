@@ -10,6 +10,11 @@
       width: 100%;
       display: flex;
       flex-wrap: wrap;
+
+      p {
+        margin: 5px;
+      }
+
       .manager {
         border: 1px solid black;
         display: flex;
@@ -22,6 +27,18 @@
         &:hover {
           background-color: #788fa8;
         }
+      }
+
+      .managerActive {
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-right: 20px;
+        padding: 10px;
+        cursor: pointer;
+        background-color: #0e56af;
+        color: white;
       }
 
       p {

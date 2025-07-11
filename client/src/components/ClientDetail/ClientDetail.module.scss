@@ -20,11 +20,17 @@
   color: white;
   transition: background-color 0.3s ease;
   text-decoration: none;
-  margin-bottom: 40px;
 
   &:hover {
     background-color: #0e56af;
   }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
 }
 
 .nav {

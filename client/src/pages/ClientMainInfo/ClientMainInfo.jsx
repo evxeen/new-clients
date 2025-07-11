@@ -14,6 +14,7 @@ function ClientMainInfo() {
                 <p><strong>Основание полномочий:</strong> {client.authority}</p>
                 <p><strong>Заявленный объем:</strong> {client.volume}</p>
                 <p><strong>Менеджер:</strong> {client.manager}</p>
+                <p><strong>Дата соз:</strong> {client.manager}</p>
             </div>
         </div>
     );
