@@ -1,0 +1,36 @@
+.funnelTable {
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+}
+
+.funnelContainer {
+  padding: 20px;
+}
+
+.начато {
+  background-color: #cce5ff; // светло-синий
+  color: #004085;
+  font-weight: bold;
+}
+
+.в_процессе {
+  background-color: #fff3cd; // светло-желтый
+  color: #856404;
+  font-weight: bold;
+}
+
+.выполнено {
+  background-color: #d4edda; // светло-зелёный
+  color: #155724;
+  font-weight: bold;
+}
+
+.empty {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}

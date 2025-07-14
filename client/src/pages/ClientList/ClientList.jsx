@@ -32,6 +32,7 @@ function ClientList() {
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button className={styles.addButton} onClick={() => toggleForm(true)}>Добавить</button>
+            <Link to={"/funnel"}>Воронка</Link>
         </div>
 
         <div className={styles.listContainer}>
