@@ -6,12 +6,13 @@ import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
 
 function ClientHistory() {
     const { client } = useOutletContext();
+    // console.log(client.history)
     const reversed = client.history.slice().reverse();
 
     return (
 
         <div className={styles.container}>
-            <AddHistoryForm clientId={client.id} />
+            <AddHistoryForm clientId={client.id} history={client.history}/>
             {reversed.map(el => (
                 <div key={el.message} className={styles.story}>
                     <p className={styles.storyDate}>{el.date}</p>

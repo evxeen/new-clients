@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { statusOptions } from "../../constants/historyOptions.js";
 import styles from "./AddHistoryForm.module.scss";
 
-function AddHistoryForm({ clientId }) {
+function AddHistoryForm({ clientId, history }) {
     const [status, setStatus] = useState("");
     const [result, setResult] = useState("");
     const [typeOfConnection, setTypeOfConnection] = useState("по телефону");
@@ -15,6 +15,8 @@ function AddHistoryForm({ clientId }) {
         date.setHours(date.getHours() + 3); // сдвиг на +3 часа
         const formattedDate = date.toISOString().slice(0, 16).replace("T", " ");
 
+        const isArchived = result === "В архив";
+
         const newHistory = {
             date: formattedDate,
             status,
@@ -24,6 +26,7 @@ function AddHistoryForm({ clientId }) {
         };
 
         try {
+            // 1. Отправляем новую запись истории
             const res = await fetch(`/api/clients/${clientId}/history`, {
                 method: "POST",
                 headers: {
@@ -32,25 +35,114 @@ function AddHistoryForm({ clientId }) {
                 body: JSON.stringify(newHistory),
             });
 
-            if (!res.ok) throw new Error("Ошибка при отправке");
+            if (!res.ok) throw new Error("Ошибка при отправке истории");
 
-            const updated = await res.json();
+            // 2. Если выбран "В архив" — обновляем сам объект клиента
+            if (isArchived) {
+                const updateRes = await fetch(`/api/clients/${clientId}/archive`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ archive: true }),
+                });
+
+                if (!updateRes.ok) throw new Error("Не удалось обновить флаг archive");
+            }
+
+            // 3. Очистка формы
             setStatus("");
             setResult("");
             setMessage("");
+
         } catch (error) {
-            alert("Ошибка при добавлении: " + error.message);
+            alert("Ошибка: " + error.message);
         }
     };
 
+    // const getAvailableStatuses = () => {
+    //     const completedStages = [];
+    //     const historyByStage = {};
+    //
+    //     history.forEach(h => {
+    //         if (!historyByStage[h.status]) historyByStage[h.status] = [];
+    //         historyByStage[h.status].push(h.result);
+    //     });
+    //
+    //     const allSteps = Object.keys(statusOptions);
+    //
+    //     for (let i = 0; i < allSteps.length; i++) {
+    //         const step = allSteps[i];
+    //         const results = historyByStage[step] || [];
+    //
+    //         // Если есть последний результат в истории — считаем завершённым
+    //         if (results.includes(statusOptions[step].at(-1))) {
+    //             completedStages.push(step);
+    //         } else {
+    //             // Первый незавершённый этап — текущий
+    //             return [step];
+    //         }
+    //     }
+    //
+    //     // Все завершены, можно новый не выбирать
+    //     return [];
+    // };
+
+    const getAvailableStatuses = () => {
+        const completedStages = [];
+        const historyByStage = {};
+
+        history.forEach(h => {
+            if (!historyByStage[h.status]) historyByStage[h.status] = [];
+            historyByStage[h.status].push(h.result);
+        });
+
+        const allSteps = Object.keys(statusOptions);
+
+        for (let i = 0; i < allSteps.length; i++) {
+            const step = allSteps[i];
+            const results = historyByStage[step] || [];
+
+            // Исключаем "В архив" из результатов для проверки завершения этапа
+            const validResults = results.filter(r => r !== "В архив");
+
+            // Если есть хотя бы один результат (кроме "В архив"), считаем этап завершенным
+            if (validResults.length > 0) {
+                completedStages.push(step);
+            } else {
+                // Первый незавершённый этап
+                return [step];
+            }
+        }
+
+        // Все этапы завершены
+        return [];
+    };
+
+
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} required>
-                    <option value="" disabled>Выберите этап</option>
-                    {Object.keys(statusOptions).map((key) => (
-                        <option key={key} value={key}>{key}</option>
-                    ))}
-                </select>
+            {/*<select value={status} onChange={(e) => setStatus(e.target.value)} required>*/}
+            {/*    <option value="" disabled>Выберите этап</option>*/}
+            {/*    {Object.keys(statusOptions).map((key) => (*/}
+            {/*        <option key={key} value={key} disabled={!getAvailableStatuses().includes(key)}>*/}
+            {/*            {key}*/}
+            {/*        </option>*/}
+            {/*    ))}*/}
+            {/*</select>*/}
+            <select value={status} onChange={(e) => setStatus(e.target.value)} required>
+                <option value="" disabled>Выберите этап</option>
+                {Object.keys(statusOptions).map((key) => (
+                    <option
+                        key={key}
+                        value={key}
+                        // Показываем все этапы, но недоступные выделяем
+                        className={!getAvailableStatuses().includes(key) ? styles.disabledOption : ''}
+                    >
+                        {key}
+                    </option>
+                ))}
+            </select>
 
             <select value={typeOfConnection} onChange={(e) => setTypeOfConnection(e.target.value)}>
                 <option value="по телефону">по телефону</option>
@@ -62,15 +154,16 @@ function AddHistoryForm({ clientId }) {
 
             {status && (
                 <select value={result} onChange={(e) => setResult(e.target.value)} required>
-                        <option value="" disabled>Выберите результат</option>
-                        {statusOptions[status].map((r) => (
-                            <option key={r} value={r}>{r}</option>
-                        ))}
-                    </select>
+                    <option value="" disabled>Выберите результат</option>
+                    {statusOptions[status].map((r) => (
+                        <option key={r} value={r}>{r}</option>
+                    ))}
+                </select>
             )}
 
 
-                <textarea placeholder='Введите комментарий' value={message} onChange={(e) => setMessage(e.target.value)} required/>
+            <textarea placeholder='Введите комментарий' value={message} onChange={(e) => setMessage(e.target.value)}
+                      required/>
 
             <button type="submit">Добавить</button>
         </form>

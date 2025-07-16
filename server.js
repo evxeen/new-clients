@@ -77,6 +77,7 @@ app.post('/api/clients', (req, res) => {
 
   const newClient = {
     id: Date.now(),
+    archive: false,
     createDate,
     company,
     activity,
@@ -270,7 +271,39 @@ app.post('/api/clients/:id/contacts', (req, res) => {
   });
 });
 
-// 📦 Отдача статики
+// 📌 Обновить флаг архивации клиента
+app.put('/api/clients/:id/archive', (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!fs.existsSync(DB_PATH)) {
+    return res.status(404).json({ error: 'База данных не найдена' });
+  }
+
+  fs.readFile(DB_PATH, 'utf-8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Ошибка чтения базы данных' });
+
+    let clients;
+    try {
+      clients = JSON.parse(data);
+    } catch (parseErr) {
+      return res.status(500).json({ error: 'Ошибка парсинга данных' });
+    }
+
+    const index = clients.findIndex(c => c.id === id);
+    if (index === -1) return res.status(404).json({ error: 'Клиент не найден' });
+
+    // Устанавливаем флаг архивации
+    clients[index].archive = true;
+
+    fs.writeFile(DB_PATH, JSON.stringify(clients, null, 2), 'utf-8', (writeErr) => {
+      if (writeErr) return res.status(500).json({ error: 'Ошибка записи' });
+      res.json(clients[index]);
+    });
+  });
+});
+
+
+
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // 🎯 SPA: для всех путей отдаём index.html
