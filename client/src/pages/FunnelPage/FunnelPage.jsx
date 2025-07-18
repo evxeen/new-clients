@@ -74,7 +74,6 @@ function getPipelineStatuses(history) {
         }
     }
 
-    // Устанавливаем "начато" только если предыдущий этап завершён ("выполнено")
     for (let i = 0; i < keys.length; i++) {
         const step = keys[i];
         if (statuses[step] === null) {
@@ -90,6 +89,8 @@ function getPipelineStatuses(history) {
 
 function FunnelPage() {
     const [clients, setClients] = useState([]);
+    const [filters, setFilters] = useState({});
+    const [archiveFilter, setArchiveFilter] = useState("all");
 
     useEffect(() => {
         fetch('/api/clients')
@@ -100,8 +101,51 @@ function FunnelPage() {
 
     const steps = Object.keys(statusOptions);
 
+    const handleFilterChange = (step, value) => {
+        setFilters(prev => ({ ...prev, [step]: value }));
+    };
+
+    const filteredClients = clients.filter(client => {
+        if (archiveFilter === "archived" && !client.archive) return false;
+        if (archiveFilter === "active" && client.archive) return false;
+
+        const pipeline = getPipelineStatuses(client.history || []);
+
+        for (const step of steps) {
+            const filterVal = filters[step];
+            if (filterVal && filterVal !== "all") {
+                if (pipeline[step] !== filterVal) return false;
+            }
+        }
+
+        return true;
+    });
+
     return (
         <div className={styles.funnelContainer}>
+            <h2>Воронка продаж</h2>
+
+            <div className={styles.filters}>
+                <div>
+                    <label>Архив:</label>
+                    <select value={archiveFilter} onChange={e => setArchiveFilter(e.target.value)}>
+                        <option value="all">Все</option>
+                        <option value="active">Активные</option>
+                        <option value="archived">В архиве</option>
+                    </select>
+                </div>
+                {steps.map(step => (
+                    <div key={step}>
+                        <label>{step}</label>
+                        <select value={filters[step] || "all"} onChange={e => handleFilterChange(step, e.target.value)}>
+                            <option value="all">Все</option>
+                            <option value="начато">Начато</option>
+                            <option value="в процессе">В процессе</option>
+                            <option value="выполнено">Выполнено</option>
+                        </select>
+                    </div>
+                ))}
+            </div>
 
             <table className={styles.funnelTable}>
                 <thead>
@@ -112,7 +156,7 @@ function FunnelPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {clients.map((client, index) => {
+                {filteredClients.map((client, index) => {
                     const pipeline = getPipelineStatuses(client.history || []);
                     return (
                         <tr key={client.id}>

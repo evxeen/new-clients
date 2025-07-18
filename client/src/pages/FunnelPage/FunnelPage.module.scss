@@ -34,3 +34,79 @@
   background-color: #f8f9fa;
   color: #6c757d;
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.filters > div {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+//.funnelContainer {
+//  padding: 24px;
+//  background: #fff;
+//  border-radius: 8px;
+//  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+//}
+
+//.filters {
+//  display: flex;
+//  flex-wrap: wrap;
+//  gap: 20px;
+//  margin-bottom: 24px;
+//  border: 1px solid #e0e0e0;
+//  padding: 16px;
+//  border-radius: 8px;
+//  background-color: #fafafa;
+//}
+
+.filters > div {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  min-width: 180px;
+}
+
+.filters label {
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #333;
+}
+
+.filters select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.funnelTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.funnelTable th,
+.funnelTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.funnelTable th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}

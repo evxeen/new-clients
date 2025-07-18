@@ -26,7 +26,6 @@ function AddHistoryForm({ clientId, history }) {
         };
 
         try {
-            // 1. Отправляем новую запись истории
             const res = await fetch(`/api/clients/${clientId}/history`, {
                 method: "POST",
                 headers: {
@@ -37,7 +36,6 @@ function AddHistoryForm({ clientId, history }) {
 
             if (!res.ok) throw new Error("Ошибка при отправке истории");
 
-            // 2. Если выбран "В архив" — обновляем сам объект клиента
             if (isArchived) {
                 const updateRes = await fetch(`/api/clients/${clientId}/archive`, {
                     method: "PUT",
@@ -60,88 +58,58 @@ function AddHistoryForm({ clientId, history }) {
         }
     };
 
-    // const getAvailableStatuses = () => {
-    //     const completedStages = [];
-    //     const historyByStage = {};
-    //
-    //     history.forEach(h => {
-    //         if (!historyByStage[h.status]) historyByStage[h.status] = [];
-    //         historyByStage[h.status].push(h.result);
-    //     });
-    //
-    //     const allSteps = Object.keys(statusOptions);
-    //
-    //     for (let i = 0; i < allSteps.length; i++) {
-    //         const step = allSteps[i];
-    //         const results = historyByStage[step] || [];
-    //
-    //         // Если есть последний результат в истории — считаем завершённым
-    //         if (results.includes(statusOptions[step].at(-1))) {
-    //             completedStages.push(step);
-    //         } else {
-    //             // Первый незавершённый этап — текущий
-    //             return [step];
-    //         }
-    //     }
-    //
-    //     // Все завершены, можно новый не выбирать
-    //     return [];
-    // };
 
     const getAvailableStatuses = () => {
-        const completedStages = [];
-        const historyByStage = {};
-
-        history.forEach(h => {
-            if (!historyByStage[h.status]) historyByStage[h.status] = [];
-            historyByStage[h.status].push(h.result);
-        });
-
         const allSteps = Object.keys(statusOptions);
+
+        if (history.length === 0) {
+            return [allSteps[0]];
+        }
+
+        let currentStep = null;
 
         for (let i = 0; i < allSteps.length; i++) {
             const step = allSteps[i];
-            const results = historyByStage[step] || [];
+            const stepResults = history.filter(h => h.status === step).map(h => h.result);
 
-            // Исключаем "В архив" из результатов для проверки завершения этапа
-            const validResults = results.filter(r => r !== "В архив");
+            const validResults = stepResults.filter(r => r !== "В архив");
 
-            // Если есть хотя бы один результат (кроме "В архив"), считаем этап завершенным
-            if (validResults.length > 0) {
-                completedStages.push(step);
-            } else {
-                // Первый незавершённый этап
-                return [step];
+            if (validResults.length === 0) {
+                currentStep = step;
+                break;
+            }
+
+            const lastValidResult = statusOptions[step].findLast(r => r !== "В архив");
+            const isCompleted = validResults.includes(lastValidResult);
+
+            if (!isCompleted) {
+                currentStep = step;
+                break;
             }
         }
 
-        // Все этапы завершены
-        return [];
+        return currentStep ? [currentStep] : [];
     };
 
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
-            {/*<select value={status} onChange={(e) => setStatus(e.target.value)} required>*/}
-            {/*    <option value="" disabled>Выберите этап</option>*/}
-            {/*    {Object.keys(statusOptions).map((key) => (*/}
-            {/*        <option key={key} value={key} disabled={!getAvailableStatuses().includes(key)}>*/}
-            {/*            {key}*/}
-            {/*        </option>*/}
-            {/*    ))}*/}
-            {/*</select>*/}
             <select value={status} onChange={(e) => setStatus(e.target.value)} required>
                 <option value="" disabled>Выберите этап</option>
-                {Object.keys(statusOptions).map((key) => (
-                    <option
-                        key={key}
-                        value={key}
-                        // Показываем все этапы, но недоступные выделяем
-                        className={!getAvailableStatuses().includes(key) ? styles.disabledOption : ''}
-                    >
-                        {key}
-                    </option>
-                ))}
+                {Object.keys(statusOptions).map((key) => {
+                    const isAvailable = getAvailableStatuses().includes(key);
+                    return (
+                        <option
+                            key={key}
+                            value={key}
+                            disabled={!isAvailable}
+                            className={isAvailable ? styles.currentStep : styles.disabledOption}
+                        >
+                            {key}
+                            {!isAvailable && " (завершите предыдущий)"}
+                        </option>
+                    );
+                })}
             </select>
 
             <select value={typeOfConnection} onChange={(e) => setTypeOfConnection(e.target.value)}>
