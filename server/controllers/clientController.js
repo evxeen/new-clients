@@ -32,7 +32,6 @@ module.exports = {
             region: 'Московская область',
             city: 'Подольск',
             suppliers: [],
-            status: 'Установление контакта',
             contacts: [],
             history: []
         };

@@ -8,6 +8,7 @@
     width: 75%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 50px;
 
     .addButton {
@@ -35,6 +36,12 @@
       border: 1px solid #ccc;
       border-radius: 8px;
     }
+
+    .additionally {
+      display: flex;
+      align-items: center;
+      width: 80%;
+    }
   }
 
   .listContainer {
@@ -49,7 +56,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       transition: transform 0.3s ease;
-      margin: 10px;
+      margin:35px;
       text-decoration: none;
       color: inherit;
 
@@ -87,4 +94,46 @@
 
 }
 
+.funnelButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #788fa8;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: white;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin-left: 30px;
+
+  &:hover {
+    background-color: #0e56af;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 15px 0;
+
+  select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+    }
+  }
+}
 

@@ -106,7 +106,7 @@ function AddHistoryForm({ clientId, history }) {
                             className={isAvailable ? styles.currentStep : styles.disabledOption}
                         >
                             {key}
-                            {!isAvailable && " (завершите предыдущий)"}
+                            {/*{!isAvailable && " (завершите предыдущий)"}*/}
                         </option>
                     );
                 })}

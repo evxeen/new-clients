@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './FunnelPage.module.scss';
+import {Link} from "react-router-dom";
 
 const statusOptions = {
     "1. Первое обращение к клиенту": [
@@ -123,8 +124,7 @@ function FunnelPage() {
 
     return (
         <div className={styles.funnelContainer}>
-            <h2>Воронка продаж</h2>
-
+            <Link className={styles.backLink} to="/">Назад</Link>
             <div className={styles.filters}>
                 <div>
                     <label>Архив:</label>
@@ -159,7 +159,7 @@ function FunnelPage() {
                 {filteredClients.map((client, index) => {
                     const pipeline = getPipelineStatuses(client.history || []);
                     return (
-                        <tr key={client.id}>
+                        <tr key={client.id} className={client.archive ? styles.archivedRow : ''}>
                             <td>{index + 1}</td>
                             <td>{client.company}</td>
                             {steps.map((step, i) => (
