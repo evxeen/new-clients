@@ -6,7 +6,6 @@ import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
 
 function ClientHistory() {
     const { client } = useOutletContext();
-    // console.log(client.history)
     const reversed = client.history.slice().reverse();
 
     return (

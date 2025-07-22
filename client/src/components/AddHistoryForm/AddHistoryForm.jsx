@@ -36,17 +36,17 @@ function AddHistoryForm({ clientId, history }) {
 
             if (!res.ok) throw new Error("Ошибка при отправке истории");
 
-            if (isArchived) {
-                const updateRes = await fetch(`/api/clients/${clientId}/archive`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ archive: true }),
-                });
-
-                if (!updateRes.ok) throw new Error("Не удалось обновить флаг archive");
-            }
+            // if (isArchived) {
+            //     const updateRes = await fetch(`/api/clients/${clientId}/archive`, {
+            //         method: "PUT",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //         body: JSON.stringify({ archive: true }),
+            //     });
+            //
+            //     if (!updateRes.ok) throw new Error("Не удалось обновить флаг archive");
+            // }
 
             // 3. Очистка формы
             setStatus("");
@@ -91,7 +91,6 @@ function AddHistoryForm({ clientId, history }) {
         return currentStep ? [currentStep] : [];
     };
 
-
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <select value={status} onChange={(e) => setStatus(e.target.value)} required>
@@ -106,7 +105,6 @@ function AddHistoryForm({ clientId, history }) {
                             className={isAvailable ? styles.currentStep : styles.disabledOption}
                         >
                             {key}
-                            {/*{!isAvailable && " (завершите предыдущий)"}*/}
                         </option>
                     );
                 })}

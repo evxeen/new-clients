@@ -91,7 +91,7 @@ function ClientList() {
 
                     <select value={archiveFilter} onChange={(e) => setArchiveFilter(e.target.value)}>
                         <option value="all">Все клиенты</option>
-                        <option value="active">Активные</option>
+                        <option value="active">Действующие</option>
                         <option value="archived">Архивные</option>
                     </select>
                 </div>

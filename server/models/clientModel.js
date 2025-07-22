@@ -50,12 +50,13 @@ class ClientModel {
         return clients[index];
     }
 
-    archiveClient(id) {
+    mainStatusClient(id, newMainStatus) {
         return this.updateClient(id, client => ({
             ...client,
-            archive: true
+            mainStatus: newMainStatus // <— Перезаписываем старый mainStatus новым
         }));
     }
+
 }
 
 module.exports = new ClientModel();

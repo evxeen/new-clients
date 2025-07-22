@@ -130,7 +130,7 @@ function FunnelPage() {
                     <label>Архив:</label>
                     <select value={archiveFilter} onChange={e => setArchiveFilter(e.target.value)}>
                         <option value="all">Все</option>
-                        <option value="active">Активные</option>
+                        <option value="active">Действующие</option>
                         <option value="archived">В архиве</option>
                     </select>
                 </div>
@@ -171,6 +171,30 @@ function FunnelPage() {
                     );
                 })}
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colSpan={2}>Итого:</td>
+                    {steps.map((step, i) => {
+                        const counts = {"начато": 0, "в процессе": 0, "выполнено": 0};
+
+                        filteredClients.forEach(client => {
+                            const pipeline = getPipelineStatuses(client.history || []);
+                            const status = pipeline[step];
+                            if (status && counts[status] !== undefined) {
+                                counts[status]++;
+                            }
+                        });
+
+                        return (
+                            <td key={i}>
+                                <div>Начато: {counts["начато"]}</div>
+                                <div>В процессе: {counts["в процессе"]}</div>
+                                <div>Выполнено: {counts["выполнено"]}</div>
+                            </td>
+                        );
+                    })}
+                </tr>
+                </tfoot>
             </table>
         </div>
     );

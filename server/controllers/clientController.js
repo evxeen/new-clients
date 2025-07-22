@@ -26,11 +26,12 @@ module.exports = {
     createClient: (req, res) => {
         const newClient = {
             id: Date.now(),
+            mainStatus: {active: ''},
             archive: false,
             createDate: getCurrentFormattedDate(),
             ...req.body,
-            region: 'Московская область',
-            city: 'Подольск',
+            region: '',
+            city: '',
             suppliers: [],
             contacts: [],
             history: []
@@ -74,9 +75,11 @@ module.exports = {
         }
     },
 
-    archiveClient: (req, res) => {
-        const id = Number(req.params.id);
-        const updatedClient = clientModel.archiveClient(id);
+    mainStatusClient: (req, res) => {
+        const id = Number(req.params.id); // 1750000000001
+        const newMainStatus = req.body; // { "potential": "Комментарий" }
+
+        const updatedClient = clientModel.mainStatusClient(id, newMainStatus); // щас узнаем
 
         if (updatedClient) {
             res.json(updatedClient);
