@@ -107,7 +107,7 @@ function ClientList() {
                                 <h3>{client.company}</h3>
                             </div>
                             <p>Менеджер: {client.manager}</p>
-                            <p>Статус: {client.history[client.history.length - 1].status}</p>
+                            <p>Статус: {client.history.length===0 ? ' История отсутствует' : client.history[client.history.length - 1].status}</p>
                             <p>Регион: {client.region}</p>
                         </Link>
                     ))}

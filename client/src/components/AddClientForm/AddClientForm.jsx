@@ -24,7 +24,7 @@ function AddClientForm({ closeForm }) {
         e.preventDefault();
 
         const newClient = {
-            id: Date.now(),
+            id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
             company,
             activity,
             requirement,
