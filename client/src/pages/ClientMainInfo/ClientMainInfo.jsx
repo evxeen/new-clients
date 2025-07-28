@@ -8,12 +8,20 @@ function ClientMainInfo() {
 
     useEffect(() => {
         setMainStatus(client.mainStatus || {});
-    }, [client?.mainStatus]); // Добавляем зависимость
+    }, [client?.mainStatus]);
 
     const handleSetMainStatus = async (newStatus) => {
-        let status = newStatus;
-        let comment = prompt('Введите текст');
-        let result = {[status]: comment};
+        let comment = "";
+
+        if (newStatus !== "active") {
+            comment = prompt("Введите причину");
+            if (!comment) {
+                alert("Необходимо ввести причину!");
+                return;
+            }
+        }
+
+        const result = { [newStatus]: comment };
 
         setMainStatus(result);
 
@@ -32,6 +40,24 @@ function ClientMainInfo() {
         }
     }
 
+    switch (mainStatus) {
+
+    }
+
+    let status = (() => {
+        switch (Object.keys(mainStatus)[0]) {
+            case "active":
+                return "Активный";
+            case "potential":
+                return "Потенциальный";
+            case "marriage":
+                return "Отбракован";
+            default:
+                return "Неизвестно";
+        }
+    })();
+
+    console.log(client)
 
     return (
         <div className={styles.container}>
@@ -43,10 +69,13 @@ function ClientMainInfo() {
                 <p><strong>Заявленный объем (месяц):</strong> {client.volume} тонн</p>
                 <p><strong>Менеджер:</strong> {client.manager}</p>
                 <p><strong>Дата создания карточки:</strong> {client.createDate}</p>
+                <p><strong>Статус:</strong> {status}</p>
+
             </div>
             <div className={styles.buttons}>
                 <button onClick={() => handleSetMainStatus("potential")}>Потенциальный</button>
                 <button onClick={() => handleSetMainStatus("marriage")}>Брак</button>
+                <button onClick={() => handleSetMainStatus("active")}>Активный</button>
             </div>
         </div>
     );
