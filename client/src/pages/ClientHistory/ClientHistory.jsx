@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from "./ClientHistory.module.scss";
 
 import {useOutletContext} from "react-router-dom";
 import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
 
 function ClientHistory() {
-    const { client } = useOutletContext();
+    const context = useOutletContext();
+    const [client, setClient] = useState(context.client);
     const reversed = client.history.slice().reverse();
 
-    return (
+    useEffect(() => {
+        setClient(context.client); // если данные снаружи обновятся — обновим и локальные
+    }, [context.client]);
 
+    const handleAddHistory = (newEntry) => {
+        setClient(prev => ({
+            ...prev,
+            history: [...prev.history, newEntry]
+        }));
+    };
+
+    return (
         <div className={styles.container}>
-            <AddHistoryForm clientId={client.id} history={client.history}/>
+            <AddHistoryForm clientId={client.id} history={client.history} onHistoryAdd={handleAddHistory}/>
             {reversed.map(el => (
                 <div key={el.message} className={styles.story}>
                     <p className={styles.storyDate}>{el.date}</p>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { statusOptions } from "../../constants/historyOptions.js";
 import styles from "./AddHistoryForm.module.scss";
 
-function AddHistoryForm({ clientId, history }) {
+function AddHistoryForm({ clientId, history, onHistoryAdd }) {
     const [status, setStatus] = useState("");
     const [result, setResult] = useState("");
     const [typeOfConnection, setTypeOfConnection] = useState("по телефону");
@@ -36,19 +36,8 @@ function AddHistoryForm({ clientId, history }) {
 
             if (!res.ok) throw new Error("Ошибка при отправке истории");
 
-            // if (isArchived) {
-            //     const updateRes = await fetch(`/api/clients/${clientId}/archive`, {
-            //         method: "PUT",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //         body: JSON.stringify({ archive: true }),
-            //     });
-            //
-            //     if (!updateRes.ok) throw new Error("Не удалось обновить флаг archive");
-            // }
+            onHistoryAdd(newHistory);
 
-            // 3. Очистка формы
             setStatus("");
             setResult("");
             setMessage("");
@@ -62,33 +51,19 @@ function AddHistoryForm({ clientId, history }) {
     const getAvailableStatuses = () => {
         const allSteps = Object.keys(statusOptions);
 
-        if (history.length === 0) {
-            return [allSteps[0]];
-        }
+        if (history.length === 0) return [allSteps[0]];
 
-        let currentStep = null;
+        // Найдём самый последний индекс этапа, который хотя бы раз был выбран
+        let lastUsedIndex = -1;
 
-        for (let i = 0; i < allSteps.length; i++) {
-            const step = allSteps[i];
-            const stepResults = history.filter(h => h.status === step).map(h => h.result);
-
-            const validResults = stepResults.filter(r => r !== "В архив");
-
-            if (validResults.length === 0) {
-                currentStep = step;
-                break;
+        history.forEach(entry => {
+            const index = allSteps.indexOf(entry.status);
+            if (index > lastUsedIndex) {
+                lastUsedIndex = index;
             }
+        });
 
-            const lastValidResult = statusOptions[step].findLast(r => r !== "В архив");
-            const isCompleted = validResults.includes(lastValidResult);
-
-            if (!isCompleted) {
-                currentStep = step;
-                break;
-            }
-        }
-
-        return currentStep ? [currentStep] : [];
+        return allSteps.slice(lastUsedIndex); // Возвращаем текущий и все после
     };
 
     return (

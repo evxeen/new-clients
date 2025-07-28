@@ -46,8 +46,7 @@ module.exports = {
                             mainStatus: {active: ''},
                             createDate: getCurrentFormattedDate(),
                             ...req.body,
-                            region: '',
-                            city: '',
+                            address: '',
                             suppliers: [],
                             contacts: [],
                             history: []

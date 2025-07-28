@@ -1,92 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import styles from './FunnelPage.module.scss';
 import {Link} from "react-router-dom";
+import styles from './FunnelPage.module.scss';
 
-const statusOptions = {
-    "1. Первое обращение к клиенту": [
-        "Дозвон. Установлен контакт",
-        "Недозвон",
-        "Отправлено холодное письмо",
-        "Получен ответ на холодное письмо",
-        "Согласовано время разговора"
-    ],
-    "2. Квалификация клиента": [
-        "Потребность есть. Закупает у конкурента",
-        "Есть интерес к нашим метизам",
-        "Отсутствует интерес к нашим метизам",
-        "Договорились о получении запроса"
-    ],
-    "3. Согласование ассортимента и объема заявки": [
-        "Ждем запрос от клиента",
-        "Получен запрос от клиента",
-        "Подготовка ответа на запрос",
-        "Ответ на запрос отправлен",
-        "Ассортимент и объем заявки согласован"
-    ],
-    "4. Предоставление Коммерческого предложения": [
-        "КП отправлено",
-        "Ожидаем ответа",
-        "Требуются правки"
-    ],
-    "5. Корректировка Коммерческого предложения": [
-        "Получен ответ на КП",
-        "КП устраивает",
-        "КП не устраивает",
-        "Подготовка корректировки КП",
-        "Скорректированное КП отправлено"
-    ],
-    "6. Передача клиента для заключения договора": [
-        "Клиент против заключения договора",
-        "Клиент готов заключить договор",
-        "Клиент передан менеджеру для заключения договора"
-    ],
-    "7. Заключение договора": [
-        "Клиенту направлен проект договора",
-        "Договор в стадии подписания",
-        "Договор подписан"
-    ],
-    "8. Размещение заказа": [
-        "Ожидание заказа у клиента",
-        "Заказ получен и передан ПрО",
-        "Заказ готов"
-    ],
-    "9. Оплата и отгрузка заказа": [
-        "Ожидание оплаты",
-        "Заказ оплачен",
-        "Ожидание отгрузки",
-        "Отгрузка заказа произведена"
-    ]
-};
+import {statusOptions} from "../../constants/historyOptions.js";
 
 function getPipelineStatuses(history) {
     const statuses = {};
-    const keys = Object.keys(statusOptions);
+    const steps = Object.keys(statusOptions);
 
-    for (let i = 0; i < keys.length; i++) {
-        const step = keys[i];
-        const results = history.filter(h => h.status === step).map(h => h.result);
-
-        if (results.length === 0) {
-            statuses[step] = null;
-        } else if (results.includes(statusOptions[step].at(-1))) {
-            statuses[step] = "выполнено";
-        } else {
-            statuses[step] = "в процессе";
-        }
+    if (!history || history.length === 0) {
+        // Если истории нет — все шаги пустые
+        steps.forEach(step => statuses[step] = null);
+        return statuses;
     }
 
-    for (let i = 0; i < keys.length; i++) {
-        const step = keys[i];
-        if (statuses[step] === null) {
-            if (i === 0 || statuses[keys[i - 1]] === "выполнено") {
-                statuses[step] = "начато";
-            }
-            break;
-        }
+    // Определяем крайний этап (по последней записи)
+    const lastEntry = history[history.length - 1];
+    const lastStepIndex = steps.indexOf(lastEntry.status);
+
+    // Все предыдущие шаги — "выполнено"
+    for (let i = 0; i < lastStepIndex; i++) {
+        statuses[steps[i]] = "выполнено";
+    }
+
+    // Крайний шаг — проверяем, завершён ли он
+    const currentStep = steps[lastStepIndex];
+    const stepResults = history
+        .filter(h => h.status === currentStep)
+        .map(h => h.result);
+
+    const isCompleted = stepResults.includes(statusOptions[currentStep].at(-1));
+    statuses[currentStep] = isCompleted ? "выполнено" : "в процессе";
+
+    // Все шаги после крайнего оставляем пустыми
+    for (let i = lastStepIndex + 1; i < steps.length; i++) {
+        statuses[steps[i]] = null;
     }
 
     return statuses;
 }
+
+
 
 function FunnelPage() {
     const [clients, setClients] = useState([]);
@@ -139,7 +93,6 @@ function FunnelPage() {
                         <label>{step}</label>
                         <select value={filters[step] || "all"} onChange={e => handleFilterChange(step, e.target.value)}>
                             <option value="all">Все</option>
-                            <option value="начато">Начато</option>
                             <option value="в процессе">В процессе</option>
                             <option value="выполнено">Выполнено</option>
                         </select>
@@ -187,7 +140,6 @@ function FunnelPage() {
 
                         return (
                             <td key={i}>
-                                <div>Начато: {counts["начато"]}</div>
                                 <div>В процессе: {counts["в процессе"]}</div>
                                 <div>Выполнено: {counts["выполнено"]}</div>
                             </td>

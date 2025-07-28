@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './AddClientForm.module.scss';
+import regionsData from '../../constants/regions.json';
 
 function AddClientForm({ closeForm }) {
     const [company, setCompany] = useState('');
@@ -7,7 +8,8 @@ function AddClientForm({ closeForm }) {
     const [requirement, setRequirement] = useState([]);
     const [volume, setVolume] = useState('');
     const [code, setCode] = useState('');
-    const [address, setAddress] = useState('');
+    const [region, setRegion] = useState('');
+    const [city, setCity] = useState('');
     const [site, setSite] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -20,17 +22,25 @@ function AddClientForm({ closeForm }) {
         "Саморезы", "Шурупы", "Заклепки", "Оси", "Шплинты", "Проволока", "др."
     ];
 
+    const uniqueRegions = [...new Set(regionsData.map(item => item.region))];
+
+    const filteredCities = regionsData
+        .filter(item => item.region === region)
+        .map(item => item.city);
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const newClient = {
             id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
             company,
+            region,
+            city,
             activity,
             requirement,
             volume,
             code,
-            address,
             site,
             email,
             phone,
@@ -55,7 +65,6 @@ function AddClientForm({ closeForm }) {
             setRequirement([]);
             setVolume('');
             setCode('');
-            setAddress('');
             setSite('');
             setEmail('');
             setPhone('');
@@ -75,11 +84,19 @@ function AddClientForm({ closeForm }) {
                 <div className={styles.fieldsBlock}>
                     <input placeholder="Название компании" value={company} onChange={e => setCompany(e.target.value)}
                            required/>
-                    <input placeholder="Область деятельности" value={activity}
-                           onChange={e => setActivity(e.target.value)}/>
+
+                    <select value={activity} onChange={e => setActivity(e.target.value)}>
+                        <option value="" disabled selected>Область деятельности</option>
+                        <option value="конечный потребитель">конечный потребитель</option>
+                        <option value="оптовая торговля">оптовая торговля</option>
+                        <option value="розничная торговля">розничная торговля</option>
+                        <option value="дистрибьюто">дистрибьютор</option>
+                        <option value="строительный магазин">строительный магазин</option>
+                        <option value="строительная организация">строительная организация</option>
+                    </select>
 
                     <div className={styles.checkboxGroup}>
-                        {productOptions.map(option => (
+                    {productOptions.map(option => (
                             <label key={option}>
                                 <input
                                     type="checkbox"
@@ -98,9 +115,28 @@ function AddClientForm({ closeForm }) {
                         ))}
                     </div>
 
-                    <input placeholder="Заявленный объем (в месяц)" value={volume} onChange={e => setVolume(e.target.value)}/>
+                    <input placeholder="Заявленный объем (в месяц)" value={volume}
+                           onChange={e => setVolume(e.target.value)}/>
                     <input placeholder="ИНН" value={code} onChange={e => setCode(e.target.value)}/>
-                    <input placeholder="Юридический адрес" value={address} onChange={e => setAddress(e.target.value)}/>
+
+                    <select value={region} onChange={e => {
+                        setRegion(e.target.value);
+                    }} required>
+                        <option value="" disabled>Выберите регион</option>
+                        {uniqueRegions.map((reg, index) => (
+                            <option key={index} value={reg}>{reg}</option>
+                        ))}
+                    </select>
+
+                    {region && (
+                        <select value={city} onChange={e => setCity(e.target.value)} required>
+                            <option value="" disabled>Выберите город</option>
+                            {filteredCities.map((c, index) => (
+                                <option key={index} value={c}>{c}</option>
+                            ))}
+                        </select>
+                    )}
+
                     <input placeholder="Сайт компании" value={site} onChange={e => setSite(e.target.value)}/>
                     <input placeholder="Электронная почта компании" value={email}
                            onChange={e => setEmail(e.target.value)}/>
@@ -110,15 +146,15 @@ function AddClientForm({ closeForm }) {
                            onChange={e => setDirector(e.target.value)}/>
                     <input placeholder="Основание полномочий" value={authority}
                            onChange={e => setAuthority(e.target.value)}/>
-                    <select value={manager} onChange={e => setManager(e.target.value) }>
-                        <option value="" disabled selected>Выберите вариант</option>
+                    <select value={manager} onChange={e => setManager(e.target.value)}>
+                        <option value="" disabled selected>Менеджер</option>
                         <option value="Иван Иванов">Иван Иванов</option>
                         <option value="Михаил Петров">Михаил Петров</option>
                         <option value="Мария Лелина">Мария Лелина</option>
                     </select>
 
                     <div className={styles.buttons}>
-                    <button type="submit" >Добавить</button>
+                        <button type="submit">Добавить</button>
                         <button type="button" onClick={() => closeForm(false)}>Отменить</button>
                     </div>
 
