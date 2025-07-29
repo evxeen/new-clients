@@ -7,6 +7,7 @@ import ClientMainInfo from "./pages/ClientMainInfo/ClientMainInfo.jsx";
 import ClientHistory from "./pages/ClientHistory/ClientHistory.jsx";
 import EditClientPage from "./pages/EditClientPage/EditClientPage.jsx";
 import FunnelPage from "./pages/FunnelPage/FunnelPage.jsx";
+import LeadsPage from "./pages/LeadsPage/LeadsPage.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
               <Routes>
                   <Route path="/" element={<ClientList />} />
                   <Route path="/funnel" element={<FunnelPage />} />
+                  <Route path="/leads" element={<LeadsPage />} />
                   <Route path="/client/:id" element={<ClientDetail />} >
                       <Route index element={<ClientMainInfo />} />
                       <Route path="history" element={<ClientHistory />} />

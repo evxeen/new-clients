@@ -1,0 +1,157 @@
+.container {
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.leadsTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  th {
+    background-color: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  tr:hover {
+    background-color: #f8fafc;
+  }
+}
+
+.tableRow {
+  transition: background-color 0.2s ease;
+}
+
+.summary {
+  margin-top: 1.5rem;
+
+  h3 {
+    font-weight: 600;
+  }
+}
+
+.legend {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  h4 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Стили для квалификации
+.qualification-МК {
+  color: #38a169;
+  font-weight: 500;
+}
+
+.qualification-СК {
+  color: #3182ce;
+  font-weight: 500;
+}
+
+.qualification-БК {
+  color: #9f7aea;
+  font-weight: 500;
+}
+
+// Измененные стили для результатов (русские буквы)
+.result-НК {
+  color: #38a169;
+  font-weight: 500;
+}
+
+.result-ПК {
+  color: #3182ce;
+  font-weight: 500;
+}
+
+.result-БР {
+  color: #e53e3e;
+  font-weight: 500;
+}
+
+// Стили для легенды
+.qualificationMK, .qualificationSK, .qualificationBK,
+.resultNK, .resultPK, .resultBR {
+  font-weight: bold;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.qualificationMK {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.qualificationSK {
+  background-color: #bee3f8;
+  color: #2a4365;
+}
+
+.qualificationBK {
+  background-color: #e9d8fd;
+  color: #44337a;
+}
+
+.resultNK {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.resultPK {
+  background-color: #bee3f8;
+  color: #2a4365;
+}
+
+.resultBR {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+.backLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #788fa8;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: white;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin-bottom: 50px;
+
+  &:hover {
+    background-color: #0e56af;
+  }
+}

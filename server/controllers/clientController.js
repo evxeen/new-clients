@@ -17,8 +17,12 @@ module.exports = {
         }
     },
 
-     getClientById: async (req, res) => {
+    getClientById: async (req, res) => {
         const id = Number(req.params.id);
+
+        if (isNaN(id)) {
+            return res.status(400).json({ error: 'Некорректный ID клиента' });
+        }
 
         try {
             const client = await prisma.client.findUnique({
@@ -183,6 +187,51 @@ module.exports = {
             res.status(500).json({ error: 'Ошибка сервера' });
         }
     },
+
+    getLeadsTable: async (req, res) => {
+        try {
+            const clients = await prisma.client.findMany();
+
+            const leads = clients.map((client, index) => {
+                // --- Квалификация ---
+                let qualification = "МК";
+                if (client.requirement.length > 5) qualification = "БК";
+                else if (client.requirement.length > 3) qualification = "СК";
+
+                // --- Результат ---
+                let result = "НК"; // не квалифицирован
+                if (client.mainStatus?.potential) result = "ПК";
+                if (client.mainStatus?.marriage) result = "БР";
+
+                let description;
+
+                if (client.mainStatus.active === undefined) {
+                    // Если нет свойства active, ищем другие возможные свойства
+                    if (client.mainStatus.potential !== undefined) {
+                        description = client.mainStatus.potential;
+                    } else if (client.mainStatus.marriage !== undefined) {
+                        description = client.mainStatus.marriage;
+                    }
+                }
+
+                return {
+                    number: index + 1,
+                    company: client.company || "Без названия",
+                    qualification,
+                    result,
+                    description,
+                    reasonAdd: client.reasonAdd || "",
+                    reasonReject: client.reasonReject || ""
+                };
+            });
+
+            res.json(leads);
+        } catch (error) {
+            console.error('Ошибка при формировании таблицы лидов:', error);
+            res.status(500).json({ error: 'Ошибка сервера при получении лидов' });
+        }
+    },
+
 
 
 
