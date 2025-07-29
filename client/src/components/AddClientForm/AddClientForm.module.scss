@@ -20,16 +20,18 @@
     border-radius: 10px;
 
     .fieldsBlock {
-      height: 80vh;
+      //height: 80vh;
       display: flex;
       justify-content: space-around;
       flex-direction: column;
       margin: 40px 40px ;
 
       input, select {
+        margin-bottom: 20px;
         height: 4vh;
         font-size: 20px;
         padding-left: 10px;
+        border-radius: 10px;
       }
 
       .checkboxGroup {

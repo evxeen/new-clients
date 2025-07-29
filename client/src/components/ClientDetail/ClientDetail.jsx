@@ -45,7 +45,7 @@ function ClientDetail() {
             </nav>
 
             <div className={styles.content}>
-                <Outlet context={{client}}/>
+                <Outlet context={{client, setClient}}/>
             </div>
         </div>
     );

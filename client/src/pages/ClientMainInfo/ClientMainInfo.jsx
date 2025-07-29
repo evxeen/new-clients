@@ -3,7 +3,7 @@ import styles from './ClientMainInfo.module.scss';
 import {useOutletContext} from "react-router-dom";
 
 function ClientMainInfo() {
-    const { client } = useOutletContext();
+    const { client,setClient } = useOutletContext();
     const [mainStatus, setMainStatus] = useState({});
 
     useEffect(() => {
@@ -35,6 +35,7 @@ function ClientMainInfo() {
             });
 
             if (!res.ok) throw new Error("Ошибка при установке статуса");
+            setClient(prev => ({ ...prev, mainStatus: result }));
         } catch (e) {
             console.log(e.message)
         }
@@ -56,8 +57,6 @@ function ClientMainInfo() {
                 return "Неизвестно";
         }
     })();
-
-    console.log(client)
 
     return (
         <div className={styles.container}>
