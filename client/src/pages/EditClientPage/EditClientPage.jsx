@@ -37,7 +37,6 @@ function EditClientPage() {
             });
     }, [id]);
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -113,7 +112,6 @@ function EditClientPage() {
                     ))}
                 </div>
             </div>
-
 
             <div className={styles.field}>
                 <label>Сайт компании:</label>

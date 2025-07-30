@@ -137,3 +137,21 @@
   color: #b30000; /* темно-красный текст */
   font-weight: bold;
 }
+
+.activeRow {
+  background-color: #e8fbe8; // светло-зеленый фон
+}
+
+.potentialRow {
+  background-color: #e8f0fb; // светло-синий фон
+}
+
+.marriageRow {
+  background-color: #fdeaea; // светло-красный фон
+}
+
+.activeRow:hover,
+.potencialRow:hover,
+.marriageRow:hover {
+  filter: brightness(0.95);
+}

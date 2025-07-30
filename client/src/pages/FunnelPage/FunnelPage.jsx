@@ -53,12 +53,36 @@ function FunnelPage() {
         setFilters(prev => ({ ...prev, [step]: value }));
     };
 
+    // const filteredClients = clients.filter(client => {
+    //     // Проверяем фильтр по статусу (mainStatus)
+    //     if (archiveFilter !== "all") {
+    //         if (!client.mainStatus || !client.mainStatus[archiveFilter]) {
+    //             return false;
+    //         }
+    //     }
+    //
+    //     const pipeline = getPipelineStatuses(client.history || []);
+    //
+    //     // Проверка фильтров по шагам воронки
+    //     for (const step of steps) {
+    //         const filterVal = filters[step];
+    //         if (filterVal && filterVal !== "all") {
+    //             if (pipeline[step] !== filterVal) return false;
+    //         }
+    //     }
+    //
+    //     return true;
+    // });
+
     const filteredClients = clients.filter(client => {
-        if (archiveFilter === "archived" && !client.archive) return false;
-        if (archiveFilter === "active" && client.archive) return false;
+        if (archiveFilter !== "all") {
+            const statusKey = Object.keys(client.mainStatus || {})[0];
+            if (statusKey !== archiveFilter) {
+                return false;
+            }
+        }
 
         const pipeline = getPipelineStatuses(client.history || []);
-
         for (const step of steps) {
             const filterVal = filters[step];
             if (filterVal && filterVal !== "all") {
@@ -68,7 +92,6 @@ function FunnelPage() {
 
         return true;
     });
-
     return (
         <div className={styles.funnelContainer}>
             <Link className={styles.backLink} to="/">Назад</Link>
@@ -78,7 +101,8 @@ function FunnelPage() {
                     <select value={archiveFilter} onChange={e => setArchiveFilter(e.target.value)}>
                         <option value="all">Все</option>
                         <option value="active">Действующие</option>
-                        <option value="archived">В архиве</option>
+                        <option value="potential">Потенциальные</option>
+                        <option value="marriage">Отбракованы</option>
                     </select>
                 </div>
                 {steps.map(step => (
@@ -105,7 +129,16 @@ function FunnelPage() {
                 {filteredClients.map((client, index) => {
                     const pipeline = getPipelineStatuses(client.history || []);
                     return (
-                        <tr key={client.id} className={client.archive ? styles.archivedRow : ''}>
+                        <tr   key={client.id}
+                              className={
+                                  client.mainStatus?.marriage
+                                      ? styles.marriageRow
+                                      : client.mainStatus?.potential
+                                          ? styles.potentialRow
+                                          : client.mainStatus?.active
+                                              ? styles.activeRow
+                                              : ''
+                              }>
                             <td>{index + 1}</td>
                             <td>{client.company}</td>
                             {steps.map((step, i) => (
