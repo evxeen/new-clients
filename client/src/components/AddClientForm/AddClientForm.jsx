@@ -85,40 +85,6 @@ function AddClientForm({ closeForm }) {
                     <input placeholder="Название компании" value={company} onChange={e => setCompany(e.target.value)}
                            required/>
 
-                    {/*<select value={activity} onChange={e => setActivity(e.target.value)}>*/}
-                    {/*    <option value="" disabled selected>Область деятельности</option>*/}
-                    {/*    <option value="конечный потребитель">конечный потребитель</option>*/}
-                    {/*    <option value="оптовая торговля">оптовая торговля</option>*/}
-                    {/*    <option value="розничная торговля">розничная торговля</option>*/}
-                    {/*    <option value="дистрибьюто">дистрибьютор</option>*/}
-                    {/*    <option value="строительный магазин">строительный магазин</option>*/}
-                    {/*    <option value="строительная организация">строительная организация</option>*/}
-                    {/*</select>*/}
-
-                    {/*<div className={styles.checkboxGroup}>*/}
-                    {/*{productOptions.map(option => (*/}
-                    {/*        <label key={option}>*/}
-                    {/*            <input*/}
-                    {/*                type="checkbox"*/}
-                    {/*                value={option}*/}
-                    {/*                checked={requirement.includes(option)}*/}
-                    {/*                onChange={(e) => {*/}
-                    {/*                    if (e.target.checked) {*/}
-                    {/*                        setRequirement([...requirement, option]);*/}
-                    {/*                    } else {*/}
-                    {/*                        setRequirement(requirement.filter(item => item !== option));*/}
-                    {/*                    }*/}
-                    {/*                }}*/}
-                    {/*            />*/}
-                    {/*            {option}*/}
-                    {/*        </label>*/}
-                    {/*    ))}*/}
-                    {/*</div>*/}
-
-                    {/*<input placeholder="Заявленный объем (в месяц)" value={volume}*/}
-                    {/*       onChange={e => setVolume(e.target.value)}/>*/}
-                    {/*<input placeholder="ИНН" value={code} onChange={e => setCode(e.target.value)}/>*/}
-
                     <select value={region} onChange={e => {
                         setRegion(e.target.value);
                     }} required>
@@ -136,22 +102,6 @@ function AddClientForm({ closeForm }) {
                             ))}
                         </select>
                     )}
-
-                    {/*<input placeholder="Сайт компании" value={site} onChange={e => setSite(e.target.value)}/>*/}
-                    {/*<input placeholder="Электронная почта компании" value={email}*/}
-                    {/*       onChange={e => setEmail(e.target.value)}/>*/}
-                    {/*<input placeholder="Номер телефона компании" value={phone}*/}
-                    {/*       onChange={e => setPhone(e.target.value)}/>*/}
-                    {/*<input placeholder="Директор компании" value={director}*/}
-                    {/*       onChange={e => setDirector(e.target.value)}/>*/}
-                    {/*<input placeholder="Основание полномочий" value={authority}*/}
-                    {/*       onChange={e => setAuthority(e.target.value)}/>*/}
-                    {/*<select value={manager} onChange={e => setManager(e.target.value)}>*/}
-                    {/*    <option value="" disabled selected>Менеджер</option>*/}
-                    {/*    <option value="Иван Иванов">Иван Иванов</option>*/}
-                    {/*    <option value="Михаил Петров">Михаил Петров</option>*/}
-                    {/*    <option value="Мария Лелина">Мария Лелина</option>*/}
-                    {/*</select>*/}
 
                     <div className={styles.buttons}>
                         <button type="submit">Добавить</button>

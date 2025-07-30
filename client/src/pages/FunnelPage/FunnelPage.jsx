@@ -9,21 +9,17 @@ function getPipelineStatuses(history) {
     const steps = Object.keys(statusOptions);
 
     if (!history || history.length === 0) {
-        // Если истории нет — все шаги пустые
         steps.forEach(step => statuses[step] = null);
         return statuses;
     }
 
-    // Определяем крайний этап (по последней записи)
     const lastEntry = history[history.length - 1];
     const lastStepIndex = steps.indexOf(lastEntry.status);
 
-    // Все предыдущие шаги — "выполнено"
     for (let i = 0; i < lastStepIndex; i++) {
         statuses[steps[i]] = "выполнено";
     }
 
-    // Крайний шаг — проверяем, завершён ли он
     const currentStep = steps[lastStepIndex];
     const stepResults = history
         .filter(h => h.status === currentStep)
@@ -32,15 +28,12 @@ function getPipelineStatuses(history) {
     const isCompleted = stepResults.includes(statusOptions[currentStep].at(-1));
     statuses[currentStep] = isCompleted ? "выполнено" : "в процессе";
 
-    // Все шаги после крайнего оставляем пустыми
     for (let i = lastStepIndex + 1; i < steps.length; i++) {
         statuses[steps[i]] = null;
     }
 
     return statuses;
 }
-
-
 
 function FunnelPage() {
     const [clients, setClients] = useState([]);
