@@ -33,7 +33,7 @@ function LeadsPage() {
                     {leads.map((lead, index) => (
                         <tr key={lead.id || index} className={styles.tableRow}>
                             <td>{index + 1}</td>
-                            <td>{lead.company}</td>
+                            <td><Link className={styles.nameLink} to={`/client/${lead.id}`}>{lead.company}</Link></td>
                             <td className={styles[`qualification-${lead.qualification}`]}>
                                 {lead.qualification}
                             </td>

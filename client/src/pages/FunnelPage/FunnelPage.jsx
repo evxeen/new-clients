@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from './FunnelPage.module.scss';
 
-import {statusOptions} from "../../constants/historyOptions.js";
+import { statusOptions } from "../../constants/historyOptions.js";
 
 function getPipelineStatuses(history) {
     const statuses = {};
@@ -15,6 +15,7 @@ function getPipelineStatuses(history) {
 
     const lastEntry = history[history.length - 1];
     const lastStepIndex = steps.indexOf(lastEntry.status);
+
 
     for (let i = 0; i < lastStepIndex; i++) {
         statuses[steps[i]] = "выполнено";
@@ -52,27 +53,6 @@ function FunnelPage() {
     const handleFilterChange = (step, value) => {
         setFilters(prev => ({ ...prev, [step]: value }));
     };
-
-    // const filteredClients = clients.filter(client => {
-    //     // Проверяем фильтр по статусу (mainStatus)
-    //     if (archiveFilter !== "all") {
-    //         if (!client.mainStatus || !client.mainStatus[archiveFilter]) {
-    //             return false;
-    //         }
-    //     }
-    //
-    //     const pipeline = getPipelineStatuses(client.history || []);
-    //
-    //     // Проверка фильтров по шагам воронки
-    //     for (const step of steps) {
-    //         const filterVal = filters[step];
-    //         if (filterVal && filterVal !== "all") {
-    //             if (pipeline[step] !== filterVal) return false;
-    //         }
-    //     }
-    //
-    //     return true;
-    // });
 
     const filteredClients = clients.filter(client => {
         if (archiveFilter !== "all") {
@@ -140,7 +120,7 @@ function FunnelPage() {
                                               : ''
                               }>
                             <td>{index + 1}</td>
-                            <td>{client.company}</td>
+                            <td><Link className={styles.nameLink} to={`/client/${client.id}`}>{client.company}</Link> </td>
                             {steps.map((step, i) => (
                                 <td key={i} className={styles[(pipeline[step] || 'empty').replace(/\s/g, '_')]}>
                                     {pipeline[step] || '—'}
