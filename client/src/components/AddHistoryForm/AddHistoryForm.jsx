@@ -51,7 +51,10 @@ function AddHistoryForm({ clientId, history, onHistoryAdd }) {
     const getAvailableStatuses = () => {
         const allSteps = Object.keys(statusOptions);
 
-        if (history.length === 0) return [allSteps[0]];
+        if (history.length === 0) {
+            // если история пустая, разрешаем выбрать любой этап
+            return allSteps;
+        }
 
         // Найдём самый последний индекс этапа, который хотя бы раз был выбран
         let lastUsedIndex = -1;
@@ -63,7 +66,8 @@ function AddHistoryForm({ clientId, history, onHistoryAdd }) {
             }
         });
 
-        return allSteps.slice(lastUsedIndex); // Возвращаем текущий и все после
+        // Возвращаем текущий и все после
+        return allSteps.slice(lastUsedIndex);
     };
 
     return (
