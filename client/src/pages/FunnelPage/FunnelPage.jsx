@@ -72,6 +72,12 @@ function FunnelPage() {
 
         return true;
     });
+
+    const resetFilters = () => {
+        setFilters({});
+        setArchiveFilter("all");
+    }
+
     return (
         <div className={styles.funnelContainer}>
             <Link className={styles.backLink} to="/">Назад</Link>
@@ -95,6 +101,8 @@ function FunnelPage() {
                         </select>
                     </div>
                 ))}
+
+                <button onClick={resetFilters}>Сбросить</button>
             </div>
 
             <table className={styles.funnelTable}>

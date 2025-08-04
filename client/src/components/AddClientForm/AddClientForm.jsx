@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 import styles from './AddClientForm.module.scss';
 import regionsData from '../../constants/regions.json';
 
-function AddClientForm({ closeForm }) {
+function AddClientForm({ closeForm, onClientAdded  }) {
+    const navigate = useNavigate();
     const [company, setCompany] = useState('');
     const [activity, setActivity] = useState('');
     const [requirement, setRequirement] = useState([]);
@@ -57,9 +59,11 @@ function AddClientForm({ closeForm }) {
                 body: JSON.stringify(newClient),
             });
             const data = await res.json();
-            // onAdd(data);
 
-            // Очистка формы
+            // обновляем список в ClientList
+            if (onClientAdded) onClientAdded(data);
+
+            // очищаем форму
             setCompany('');
             setActivity('');
             setRequirement([]);
@@ -70,12 +74,15 @@ function AddClientForm({ closeForm }) {
             setPhone('');
             setDirector('');
             setAuthority('');
+            setManager('');
+            setRegion('');
+            setCity('');
 
             closeForm(false);
+            navigate(`/client/${data.id}/edit`);
         } catch (err) {
             console.error('Ошибка добавления клиента:', err);
         }
-
     };
 
     return (
