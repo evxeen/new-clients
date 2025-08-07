@@ -7,7 +7,8 @@ function AddContactForm({ onClose, onSubmit }) {
         lastName: '',
         post: '',
         phone: '',
-        email: ''
+        email: '',
+        isMain: false
     });
 
     const handleSubmit = () => {

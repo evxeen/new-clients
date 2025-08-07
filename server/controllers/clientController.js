@@ -4,8 +4,6 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-
-
 module.exports = {
      getAllClients: async (req, res) => {
         try {
@@ -46,15 +44,20 @@ module.exports = {
 
             const newClient = await prisma.client.create({
                 data: {
-                            id: Date.now(),
-                            mainStatus: {active: ''},
-                            createDate: getCurrentFormattedDate(),
-                            ...req.body,
-                            address: '',
-                            suppliers: [],
-                            contacts: [],
-                            history: []
-                        }
+                    id: Date.now(),
+                    mainStatus: {active: ''},
+                    createDate: getCurrentFormattedDate(),
+                    ...req.body,
+                    address: '',
+                    suppliers: [],
+                    contacts: [],
+                    history: [],
+                    staff: '',
+                    branchAvailability: [],
+                    warehouses: [],
+                    customers: '',
+                    salesVolume: '',
+                }
             });
 
             res.status(201).json(newClient);
@@ -232,7 +235,69 @@ module.exports = {
         }
     },
 
+    getCountries: async (req, res) => {
+        try {
+            const countries = await prisma.country.findMany({
+                orderBy: { name: 'asc' }
+            });
 
+            const safeCountries = countries.map(c => ({
+                ...c,
+                id: c.id.toString() // или Number(c.id)
+            }));
+
+            res.json(safeCountries);
+        } catch (error) {
+            console.error('Ошибка при получении стран:', error);
+            res.status(500).json({ error: 'Ошибка сервера' });
+        }
+    },
+
+    getRegions: async (req, res) => {
+        try {
+            const { countryId } = req.query;
+            if (!countryId) return res.status(400).json({ error: 'Не передан countryId' });
+
+            const regions = await prisma.region.findMany({
+                where: { countryId: BigInt(countryId) },
+                orderBy: { name: 'asc' }
+            });
+
+            const safeRegions = regions.map(r => ({
+                ...r,
+                id: r.id.toString(),
+                countryId: r.countryId.toString()
+            }));
+
+            res.json(safeRegions);
+        } catch (error) {
+            console.error('Ошибка при получении регионов:', error);
+            res.status(500).json({ error: 'Ошибка сервера' });
+        }
+    },
+
+    getCities: async (req, res) => {
+        try {
+            const { regionId } = req.query;
+            if (!regionId) return res.status(400).json({ error: 'Не передан regionId' });
+
+            const cities = await prisma.city.findMany({
+                where: { regionId: BigInt(regionId) },
+                orderBy: { name: 'asc' }
+            });
+
+            const safeCities = cities.map(c => ({
+                ...c,
+                id: c.id.toString(),
+                regionId: c.regionId.toString()
+            }));
+
+            res.json(safeCities);
+        } catch (error) {
+            console.error('Ошибка при получении городов:', error);
+            res.status(500).json({ error: 'Ошибка сервера' });
+        }
+    },
 
 
     // getAllClients: (req, res) => {

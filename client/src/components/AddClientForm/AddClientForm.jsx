@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import styles from './AddClientForm.module.scss';
-import regionsData from '../../constants/regions.json';
 
-function AddClientForm({ closeForm, onClientAdded  }) {
+function AddClientForm({ closeForm, onClientAdded }) {
     const navigate = useNavigate();
+
     const [company, setCompany] = useState('');
     const [activity, setActivity] = useState('');
     const [requirement, setRequirement] = useState([]);
     const [volume, setVolume] = useState('');
     const [code, setCode] = useState('');
+    const [country, setCountry] = useState('');
     const [region, setRegion] = useState('');
     const [city, setCity] = useState('');
     const [site, setSite] = useState('');
@@ -19,17 +20,36 @@ function AddClientForm({ closeForm, onClientAdded  }) {
     const [authority, setAuthority] = useState('');
     const [manager, setManager] = useState('');
 
-    const productOptions = [
-        "Гвозди", "Болты", "Винты", "Гайки", "Шпильки",
-        "Саморезы", "Шурупы", "Заклепки", "Оси", "Шплинты", "Проволока", "др."
-    ];
+    // справочники
+    const [countries, setCountries] = useState([]);
+    const [regions, setRegions] = useState([]);
+    const [cities, setCities] = useState([]);
 
-    const uniqueRegions = [...new Set(regionsData.map(item => item.region))];
+    // загрузка стран
+    useEffect(() => {
+        fetch('/api/clients/countries')
+            .then(res => res.json())
+            .then(data => setCountries(data))
+            .catch(err => console.error('Ошибка загрузки стран:', err));
+    }, []);
 
-    const filteredCities = regionsData
-        .filter(item => item.region === region)
-        .map(item => item.city);
+    // загрузка регионов при выборе страны
+    useEffect(() => {
+        if (!country) return;
+        fetch(`/api/clients/regions?countryId=${country}`)
+            .then(res => res.json())
+            .then(data => setRegions(data))
+            .catch(err => console.error('Ошибка загрузки регионов:', err));
+    }, [country]);
 
+    // загрузка городов при выборе региона
+    useEffect(() => {
+        if (!region) return;
+        fetch(`/api/clients/cities?regionId=${region}`)
+            .then(res => res.json())
+            .then(data => setCities(data))
+            .catch(err => console.error('Ошибка загрузки городов:', err));
+    }, [region]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,12 +57,13 @@ function AddClientForm({ closeForm, onClientAdded  }) {
         const newClient = {
             id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
             company,
-            region,
-            city,
             activity,
             requirement,
             volume,
             code,
+            country, // сохраняем строкой
+            region,
+            city,
             site,
             email,
             phone,
@@ -60,24 +81,7 @@ function AddClientForm({ closeForm, onClientAdded  }) {
             });
             const data = await res.json();
 
-            // обновляем список в ClientList
             if (onClientAdded) onClientAdded(data);
-
-            // очищаем форму
-            setCompany('');
-            setActivity('');
-            setRequirement([]);
-            setVolume('');
-            setCode('');
-            setSite('');
-            setEmail('');
-            setPhone('');
-            setDirector('');
-            setAuthority('');
-            setManager('');
-            setRegion('');
-            setCity('');
-
             closeForm(false);
             navigate(`/client/${data.id}/edit`);
         } catch (err) {
@@ -89,23 +93,34 @@ function AddClientForm({ closeForm, onClientAdded  }) {
         <div className={styles.overlay}>
             <form className={styles.addForm} onSubmit={handleSubmit}>
                 <div className={styles.fieldsBlock}>
-                    <input placeholder="Название компании" value={company} onChange={e => setCompany(e.target.value)}
-                           required/>
+                    <input
+                        placeholder="Название компании"
+                        value={company}
+                        onChange={e => setCompany(e.target.value)}
+                        required
+                    />
 
-                    <select value={region} onChange={e => {
-                        setRegion(e.target.value);
-                    }} required>
-                        <option value="" disabled>Выберите регион</option>
-                        {uniqueRegions.map((reg, index) => (
-                            <option key={index} value={reg}>{reg}</option>
+                    <select value={country} onChange={e => setCountry(e.target.value)} required>
+                        <option value="" disabled>Выберите страну</option>
+                        {countries.map(c => (
+                            <option key={c.id} value={c.id}>{c.name}</option>
                         ))}
                     </select>
+
+                    {country && (
+                        <select value={region} onChange={e => setRegion(e.target.value)} required>
+                            <option value="" disabled>Выберите регион</option>
+                            {regions.map(r => (
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                            ))}
+                        </select>
+                    )}
 
                     {region && (
                         <select value={city} onChange={e => setCity(e.target.value)} required>
                             <option value="" disabled>Выберите город</option>
-                            {filteredCities.map((c, index) => (
-                                <option key={index} value={c}>{c}</option>
+                            {cities.map(c => (
+                                <option key={c.id} value={c.name}>{c.name}</option>
                             ))}
                         </select>
                     )}
@@ -114,7 +129,6 @@ function AddClientForm({ closeForm, onClientAdded  }) {
                         <button type="submit">Добавить</button>
                         <button type="button" onClick={() => closeForm(false)}>Отменить</button>
                     </div>
-
                 </div>
             </form>
         </div>

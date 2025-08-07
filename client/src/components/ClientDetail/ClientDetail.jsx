@@ -29,7 +29,7 @@ function ClientDetail() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.header}>
-                <Link className={styles.backLink} to="/">Назад</Link>
+                <Link className={styles.backLink} to="/">Главная</Link>
                 <h2>{client.company}</h2>
             </div>
 

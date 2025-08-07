@@ -1,47 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import styles from "./ClientContacts.module.scss";
 import {useOutletContext} from "react-router-dom";
-import AddContactForm from "../../components/AddContactForm/AddContactForm.jsx";
 
 function ClientContacts() {
     const { client } = useOutletContext();
     const [ updatedClient, setUpdatedClient ] = useState(client);
-    const [showModal, setShowModal] = useState(false);
-
 
     useEffect(() => {
         setUpdatedClient(client);
     }, [client]);
 
-    const handleSetMainContact = (index) => {
-        fetch(`/api/clients/${client.id}/main-contact`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mainIndex: index })
-        })
-            .then(res => res.json())
-            .then(updated => {
-                setUpdatedClient(updated);
-            })
-            .catch(err => {
-                console.error('Ошибка при обновлении основного контакта:', err);
-            });
-    };
-
-    const handleAddContact = (newContact) => {
-        fetch(`/api/clients/${client.id}/contacts`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newContact)
-        })
-            .then(res => res.json())
-            .then(updated => {
-                setUpdatedClient(updated);
-            })
-            .catch(err => {
-                console.error('Ошибка при добавлении контакта:', err);
-            });
-    };
 
     return (
         <div className={styles.container}>
@@ -66,7 +34,6 @@ function ClientContacts() {
                         </div>
 
                     )) : 'Список пуст '}
-                    {/*<button onClick={() => setShowModal(true)}>Добавить контакт</button>*/}
                     <div
                         className={styles.addIcon}
                         onClick={() => setShowModal(true)}
@@ -87,7 +54,7 @@ function ClientContacts() {
                 </div>
             </div>
 
-            {showModal ? <AddContactForm onSubmit={handleAddContact} onClose={setShowModal}/> : ''}
+
         </div>
     );
 }

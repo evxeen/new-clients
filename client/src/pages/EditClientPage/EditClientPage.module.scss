@@ -1,19 +1,38 @@
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.formGrid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.column {
+  flex: 0 0 48%;
+}
+
 .field {
   display: flex;
   align-items: center;
   margin-bottom: 14px;
-  gap: 8px;
 
   label {
     width: 140px;
     font-size: 14px;
     font-weight: bold;
-    text-align: left;
     margin-right: 8px;
   }
 
   input, select {
-    width: 20%;
+    flex: 1;
     padding: 5px 8px;
     font-size: 14px;
     border-radius: 6px;
@@ -22,7 +41,7 @@
 }
 
 .productList {
-  width: 400px;
+  width: 500px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -36,6 +55,7 @@
   cursor: pointer;
   background: #f9f9f9;
   transition: all 0.2s ease;
+  margin-right: 10px;
 
   &:hover {
     background: #e6f0ff;
@@ -48,7 +68,13 @@
   border-color: #0e56af;
 }
 
-button {
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.buttonSave {
   width: 125px;
   height: 40px;
   font-size: 20px;
@@ -64,3 +90,50 @@ button {
   }
 }
 
+.addIcon {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  margin-top: 7px;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    color: #555;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+}
+
+.responses {
+  span {
+    margin-right: 10px;
+  }
+}
+
+.inputWarehouses {
+  width: 70px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.selectWarehouses {
+  width: 80px;
+  margin-right: 5px;
+}
+
+.requirementInput {
+  width: 50px;
+  height: 15px;
+  margin-right: 10px
+}
+
+.manager {
+  margin-top: 100px;
+}
