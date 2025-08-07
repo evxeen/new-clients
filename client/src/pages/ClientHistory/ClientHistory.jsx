@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from "./ClientHistory.module.scss";
 import { useOutletContext } from "react-router-dom";
 import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
@@ -6,6 +6,7 @@ import AddHistoryForm from "../../components/AddHistoryForm/AddHistoryForm.jsx";
 function ClientHistory() {
     const { client, setClient } = useOutletContext();
     const reversed = client.history.slice().reverse();
+    const [formIsVisible, setFormIsVisible] = useState(false);
 
     const handleAddHistory = (newEntry) => {
         setClient(prev => ({
@@ -20,11 +21,16 @@ function ClientHistory() {
         <div className={styles.container}>
             {currentMainStatus === "active" ? (
                 <>
-                    <AddHistoryForm
-                        clientId={client.id}
-                        history={client.history}
-                        onHistoryAdd={handleAddHistory}
-                    />
+                    {formIsVisible ?
+                        <AddHistoryForm
+                            clientId={client.id}
+                            history={client.history}
+                            onHistoryAdd={handleAddHistory}
+                        />
+                        :
+                        <button onClick={() => setFormIsVisible(!formIsVisible)}>Добавить</button>
+                    }
+
                     {reversed.map((el, i) => (
                         <div key={i} className={styles.story}>
                             <p className={styles.storyDate}>{el.date}</p>

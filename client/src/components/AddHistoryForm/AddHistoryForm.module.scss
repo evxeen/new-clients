@@ -1,47 +1,55 @@
-.form {
+.container {
+  display: flex;
+  height: 70vh;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 16px;
+  width: 100%;
+  overflow-x: auto; // позволяет горизонтальную прокрутку при необходимости
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.checkboxLabel {
   display: flex;
   align-items: center;
-  margin-bottom: 50px;
+  gap: 8px;
+  font-size: 14px;
+}
 
-  select {
-    height: 45px;
-    font-size: 16px;
-    margin-right: 15px;
-    padding: 5px;
-    border-radius: 10px;
-  }
+.stageBlock {
+  position: relative;
+}
 
-  textarea {
-    width: 400px;
-    height: 33px;
-    padding: 5px;
-    border-radius: 10px;
-    font-size: 16px;
-  }
+.resultsPopup {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
 
-  button {
-    margin: 15px;
-    width: 125px;
-    height: 40px;
-    font-size: 20px;
-    background-color: #788fa8;
-    border: none;
-    outline: none;
-    border-radius: 10px;
-    color: white;
-    transition: background-color 0.3s ease;
-    &:hover {
-      background-color: #0e56af;
-    }
-  }
-
-  .disabledOption {
-    color: #999;
-    background-color: #f5f5f5;
-  }
-
-  .current-step {
-    font-weight: bold;
-    color: #1890ff;
-  }
+.commentField {
+  width: 550px;
+  height: 500px;
+  padding: 10px;
+  font-size: 14px;
+  resize: vertical;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
