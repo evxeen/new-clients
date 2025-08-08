@@ -309,9 +309,8 @@ function EditClientPage() {
                         <label>Ответственный менеджер:</label>
                         <select name="manager" value={client.manager || ''} onChange={handleChange}>
                             <option value="" disabled>Выберите</option>
-                            <option value="Менеджер 1">Менеджер 1</option>
-                            <option value="Менеджер 2">Менеджер 2</option>
-                            <option value="Менеджер 3">Менеджер 3</option>
+                            <option value="Кристиан Бейл">Кристиан Бейл</option>
+                            <option value="Кристофер Ноллон">Кристофер Ноллон</option>
                         </select>
                     </div>
 
@@ -319,8 +318,10 @@ function EditClientPage() {
 
             </div>
 
-            <div className={styles.buttonSave}>
-                <button onClick={handleSave}>Сохранить</button>
+            <div className={styles.buttonSave} onClick={handleSave}>
+                <p>
+                    Сохранить
+                </p>
             </div>
         </div>
     );

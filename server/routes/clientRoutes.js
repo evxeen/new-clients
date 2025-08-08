@@ -9,6 +9,10 @@ router.get('/leads', clientController.getLeadsTable);
 
 router.get('/:id', clientController.getClientById);
 router.put('/:id', clientController.updateClient);
+router.post('/:id/history', clientController.addHistoryItem);
+router.put('/:id/main-status', clientController.updateMainStatus);
+
+
 
 router.get('/', clientController.getAllClients);
 router.post('/', clientController.createClient);

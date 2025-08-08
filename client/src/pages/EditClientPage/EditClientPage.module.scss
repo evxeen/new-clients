@@ -75,6 +75,9 @@ h2 {
 }
 
 .buttonSave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 125px;
   height: 40px;
   font-size: 20px;
@@ -84,6 +87,11 @@ h2 {
   border-radius: 10px;
   color: white;
   transition: background-color 0.3s ease;
+  cursor: pointer;
+
+  p {
+    margin: 0;
+  }
 
   &:hover {
     background-color: #0e56af;

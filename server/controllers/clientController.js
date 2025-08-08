@@ -86,34 +86,35 @@ module.exports = {
         }
     },
 
+    // Добавление записи в историю клиента
     addHistoryItem: async (req, res) => {
-        const id = Number(req.params.id);
-        const newEntry = req.body;
-
         try {
-            // Получаем текущую историю
+            const { id } = req.params;
+            const newHistoryEntry = req.body;
+
             const client = await prisma.client.findUnique({
-                where: { id },
-                select: { history: true }
+                where: { id: Number(id) },
             });
 
             if (!client) {
                 return res.status(404).json({ error: 'Клиент не найден' });
             }
 
-            const updatedHistory = [...(client.history || []), newEntry];
+            // История хранится как JSON
+            const updatedHistory = Array.isArray(client.history) ? [...client.history, newHistoryEntry] : [newHistoryEntry];
 
             const updatedClient = await prisma.client.update({
-                where: { id },
-                data: { history: updatedHistory }
+                where: { id: Number(id) },
+                data: { history: updatedHistory },
             });
 
             res.json(updatedClient);
-        } catch (error) {
-            console.error('Ошибка при добавлении записи в историю:', error);
-            res.status(500).json({ error: 'Ошибка при добавлении записи в историю' });
+        } catch (err) {
+            console.error('Ошибка при добавлении истории:', err);
+            res.status(500).json({ error: 'Не удалось добавить историю' });
         }
     },
+
 
     addContact: async (req, res) => {
         const id = Number(req.params.id);

@@ -8,34 +8,24 @@ function getPipelineStatuses(history) {
     const statuses = {};
     const steps = Object.keys(statusOptions);
 
+    steps.forEach(step => {
+        statuses[step] = null;
+    });
+
     if (!history || history.length === 0) {
-        steps.forEach(step => statuses[step] = null);
         return statuses;
     }
 
-    const lastEntry = history[history.length - 1];
-    const lastStepIndex = steps.indexOf(lastEntry.status);
-
-
-    for (let i = 0; i < lastStepIndex; i++) {
-        statuses[steps[i]] = "выполнено";
-    }
-
-    const currentStep = steps[lastStepIndex];
-    const stepResults = history
-        .filter(h => h.status === currentStep)
-        .map(h => h.result);
-
-    const isCompleted = stepResults.includes(statusOptions[currentStep].at(-1));
-    statuses[currentStep] = isCompleted ? "выполнено" : "в процессе";
-
-    for (let i = lastStepIndex + 1; i < steps.length; i++) {
-        statuses[steps[i]] = null;
-    }
+    history.forEach(entry => {
+        entry.stages?.forEach(stageItem => {
+            if (steps.includes(stageItem.stage)) {
+                statuses[stageItem.stage] = "выполнено";
+            }
+        });
+    });
 
     return statuses;
 }
-
 function FunnelPage() {
     const [clients, setClients] = useState([]);
     const [filters, setFilters] = useState({});
