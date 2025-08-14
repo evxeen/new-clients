@@ -7,6 +7,7 @@ function AddContactForm({ onClose, onSubmit }) {
         lastName: '',
         post: '',
         phone: '',
+        whatsApp: '',
         email: '',
         isMain: false
     });
@@ -44,6 +45,12 @@ function AddContactForm({ onClose, onSubmit }) {
                     placeholder="Телефон"
                     value={newContact.phone}
                     onChange={e => setNewContact({...newContact, phone: e.target.value})}
+                />
+                <input
+                    type="text"
+                    placeholder="WhatsApp"
+                    value={newContact.whatsApp}
+                    onChange={e => setNewContact({...newContact, whatsApp: e.target.value})}
                 />
                 <input
                     type="email"

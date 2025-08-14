@@ -19,6 +19,8 @@ function EditClientPage() {
     const [plusIsShow, setPlusIsShow] = useState(false);
     const [inputIsShow, setInputIsShow] = useState(false);
     const [newRequirement, setNewRequirement] = useState('');
+    const [salesValue, setSalesValue] = useState("");
+    const [salesUnit, setSalesUnit] = useState("");
 
     useEffect(() => {
         fetch(`/api/clients/${id}`)
@@ -28,7 +30,10 @@ function EditClientPage() {
                     ...data,
                     requirement: data.requirement || [],
                     activity: data.activity || "",
+                    salesVolume: { value: "", unit: "" }
                 });
+                setSalesValue(data.salesVolume?.value || "");
+                setSalesUnit(data.salesVolume?.unit || "");
                 setLoading(false);
             })
             .catch(err => {
@@ -36,6 +41,26 @@ function EditClientPage() {
                 setLoading(false);
             });
     }, [id]);
+
+    const handleSalesValueChange = (e) => {
+        const newValue = e.target.value;
+        setSalesValue(newValue);
+        setClient(prev => ({
+            ...prev,
+            salesVolume: { ...prev.salesVolume, value: newValue }
+        }));
+    };
+
+    const handleSalesUnitChange = (e) => {
+        const newUnit = e.target.value;
+        setSalesUnit(newUnit);
+        setClient(prev => ({
+            ...prev,
+            salesVolume: { ...prev.salesVolume, unit: newUnit }
+        }));
+    };
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -120,6 +145,7 @@ function EditClientPage() {
                             <option value="дистрибьютор">дистрибьютор</option>
                             <option value="строительный магазин">строительный магазин</option>
                             <option value="строительная организация">строительная организация</option>
+                            <option value="производитель">производитель</option>
                         </select>
                     </div>
 
@@ -127,6 +153,13 @@ function EditClientPage() {
                         <div className={styles.field}>
                             <label>Штат сотрудников:</label>
                             <input name="staff" value={client.staff || ''} onChange={handleChange}/>
+                        </div>
+                    </div>
+
+                    <div className={styles.column}>
+                        <div className={styles.field}>
+                            <label>Заявленный объем(в месяц):</label>
+                            <input name="volume" value={client.volume || ''} onChange={handleChange}/>
                         </div>
                     </div>
 
@@ -212,11 +245,25 @@ function EditClientPage() {
                         </div>
 
                     </div>
-
                     <div className={styles.field}>
-                        <label>Объем продаж:</label>
-                        <input name="salesVolume" value={client.salesVolume || ''} onChange={handleChange}/>
+                        <label>Объём продаж:</label>
+                        <input
+                            type="text"
+                            value={salesValue}
+                            onChange={handleSalesValueChange}
+                            className={styles.inputWarehouses}
+                        />
+                        <select
+                            value={salesUnit}
+                            onChange={handleSalesUnitChange}
+                            className={styles.selectWarehouses}
+                        >
+                            <option value="" disabled>Выберите значение</option>
+                            <option value="тонн">тонн</option>
+                            <option value="рос. рублей">рос. рублей</option>
+                        </select>
                     </div>
+
 
                     <div className={styles.column}>
                         <div className={styles.field}>
@@ -305,12 +352,36 @@ function EditClientPage() {
                         </select>
                     </div>
 
+                    <div className={styles.field}>
+                        <label>Источник клиента:</label>
+                        <select name="sourceLid" value={client.sourceLid || ''} onChange={handleChange}>
+                            <option value="" disabled>Выберите</option>
+                            <option value="Интернет-поиск (Google, Яндекс и др.)">Интернет-поиск (Google, Яндекс и
+                                др.)
+                            </option>
+                            <option value="Рекомендации и сарафанное радио">Рекомендации и сарафанное радио</option>
+                            <option value="Социальные сети (VK, Instagram, Facebook и др.)">Социальные сети (VK,
+                                Instagram, Facebook и др.)
+                            </option>
+                            <option value="Выставка или ярмарка">Выставка или ярмарка</option>
+                            <option value="Холодный звонок">Холодный звонок</option>
+                            <option value="Email-рассылка">Email-рассылка</option>
+                            <option value="Реклама в интернете (контекстная, баннерная и др.)">Реклама в интернете
+                                (контекстная, баннерная и др.)
+                            </option>
+                            <option value="Реклама в СМИ (телевидение, радио, газеты)">Реклама в СМИ (телевидение,
+                                радио, газеты)
+                            </option>
+                            <option value="Партнёрская программа">Партнёрская программа</option>
+                        </select>
+                    </div>
+
                     <div className={`${styles.field} ${styles.manager}`}>
                         <label>Ответственный менеджер:</label>
                         <select name="manager" value={client.manager || ''} onChange={handleChange}>
                             <option value="" disabled>Выберите</option>
-                            <option value="Кристиан Бейл">Кристиан Бейл</option>
-                            <option value="Кристофер Ноллон">Кристофер Ноллон</option>
+                            <option value="Капуза Виктор">Капуза Виктор</option>
+                            <option value="Петоченко Светлана">Петоченко Светлана</option>
                         </select>
                     </div>
 

@@ -1,152 +1,21 @@
-// import React, { useState } from "react";
-// import { statusOptions } from "../../constants/historyOptions.js";
-// import styles from "./AddHistoryForm.module.scss";
-//
-// const generateDate = new Date();
-// generateDate.setHours(generateDate.getHours() + 3);
-//
-// const day = String(generateDate.getDate()).padStart(2, '0');
-// const month = String(generateDate.getMonth() + 1).padStart(2, '0');
-// const year = generateDate.getFullYear();
-// const hours = String(generateDate.getHours()).padStart(2, '0');
-// const minutes = String(generateDate.getMinutes()).padStart(2, '0');
-// const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
-//
-// const connectionOptions = ['по телефону', 'эл.почта', 'WhatsApp', 'LinkedIn', 'Очная встреча'];
-//
-// function AddHistoryForm({ clientId, history, onHistoryAdd }) {
-//     const [date] = useState(formattedDate);
-//     const [typeConnection, setTypeConnection] = useState('');
-//     const [selectedStages, setSelectedStages] = useState([]);
-//     const [selectedResults, setSelectedResults] = useState({});
-//     const [comment, setComment] = useState('');
-//
-//     const toggleStage = (stage) => {
-//         setSelectedStages((prev) =>
-//             prev.includes(stage) ? prev.filter((s) => s !== stage) : [...prev, stage]
-//         );
-//         if (!selectedStages.includes(stage)) {
-//             setSelectedResults((prev) => ({ ...prev, [stage]: [] }));
-//         }
-//     };
-//
-//     const toggleResult = (stage, result) => {
-//         setSelectedResults((prev) => {
-//             const currentResults = prev[stage] || [];
-//             const updated = currentResults.includes(result)
-//                 ? currentResults.filter((r) => r !== result)
-//                 : [...currentResults, result];
-//             return { ...prev, [stage]: updated };
-//         });
-//     };
-//
-//     return (
-//         <div className={styles.container}>
-//             {/* Дата */}
-//             <div className={styles.column}>
-//                 <h4>Дата</h4>
-//                 <p>{date}</p>
-//             </div>
-//
-//             {/* Вид связи */}
-//             <div className={styles.column}>
-//                 <h4>Вид связи</h4>
-//                 {connectionOptions.map((el, i) => (
-//                     <label key={i} className={styles.checkboxLabel}>
-//                         <input
-//                             type="radio"
-//                             name="connection"
-//                             value={el}
-//                             checked={typeConnection === el}
-//                             onChange={() => setTypeConnection(el)}
-//                         />
-//                         {el}
-//                     </label>
-//                 ))}
-//             </div>
-//
-//             {/* Этапы */}
-//             <div className={styles.column}>
-//                 <h4>Этапы</h4>
-//
-//                 {Object.keys(statusOptions).map((stage, i) => {
-//                     const [isHovered, setIsHovered] = useState(false); // 🔸 внутри map нельзя!
-//
-//                     return (
-//                         <div
-//                             key={i}
-//                             className={styles.stageBlock}
-//                             onMouseEnter={() => setIsHovered(true)}
-//                             onMouseLeave={() => setIsHovered(false)}
-//                         >
-//                             <label className={styles.checkboxLabel}>
-//                                 <input
-//                                     type="checkbox"
-//                                     checked={selectedStages.includes(stage)}
-//                                     onChange={() => toggleStage(stage)}
-//                                 />
-//                                 {stage}
-//                             </label>
-//
-//                             {selectedStages.includes(stage) && isHovered && (
-//                                 <div className={styles.resultsPopup}>
-//                                     {statusOptions[stage].map((result, j) => (
-//                                         <label key={j} className={styles.checkboxLabel}>
-//                                             <input
-//                                                 type="checkbox"
-//                                                 checked={selectedResults[stage]?.includes(result) || false}
-//                                                 onChange={() => toggleResult(stage, result)}
-//                                             />
-//                                             {result}
-//                                         </label>
-//                                     ))}
-//                                 </div>
-//                             )}
-//                         </div>
-//                     );
-//                 })}
-//
-//             </div>
-//
-//             {/* Комментарий */}
-//             <div className={styles.column} style={{ flexGrow: 1 }}>
-//                 <h4>Комментарий</h4>
-//                 <textarea
-//                     className={styles.commentField}
-//                     value={comment}
-//                     onChange={(e) => setComment(e.target.value)}
-//                     placeholder="Введите комментарий..."
-//                 />
-//             </div>
-//         </div>
-//     );
-// }
-//
-// export default AddHistoryForm;
-
 import React, { useState } from "react";
-import { statusOptions } from "../../constants/historyOptions.js";
 import styles from "./AddHistoryForm.module.scss";
 
-const generateDate = new Date();
-generateDate.setHours(generateDate.getHours() + 3);
+import { statusOptions } from "../../constants/historyOptions.js";
+import { FaCheck, FaPlus, FaCalendarAlt, FaComment, FaSave } from "react-icons/fa";
+import {getMinskTime} from "../../../helpers/getMinskTime.js";
 
-const day = String(generateDate.getDate()).padStart(2, '0');
-const month = String(generateDate.getMonth() + 1).padStart(2, '0');
-const year = generateDate.getFullYear();
-const hours = String(generateDate.getHours()).padStart(2, '0');
-const minutes = String(generateDate.getMinutes()).padStart(2, '0');
-const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+const formattedDate = getMinskTime();
 
 const connectionOptions = ['по телефону', 'эл.почта', 'WhatsApp', 'LinkedIn', 'Очная встреча'];
 
-function AddHistoryForm({ clientId, history, onHistoryAdd }) {
+function AddHistoryForm({ clientId, history, onHistoryAdd, onCancel }) {
     const [date] = useState(formattedDate);
     const [typeConnection, setTypeConnection] = useState('');
     const [selectedStages, setSelectedStages] = useState([]);
     const [selectedResults, setSelectedResults] = useState({});
     const [comment, setComment] = useState('');
-    const [hoveredStage, setHoveredStage] = useState(null); // 👈 вынесено из map
+    const [hoveredStage, setHoveredStage] = useState(null);
 
     const toggleStage = (stage) => {
         setSelectedStages((prev) =>
@@ -167,7 +36,9 @@ function AddHistoryForm({ clientId, history, onHistoryAdd }) {
         });
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         const newEntry = {
             date,
             typeConnection,
@@ -185,21 +56,22 @@ function AddHistoryForm({ clientId, history, onHistoryAdd }) {
                 body: JSON.stringify(newEntry)
             });
 
-            if (!res.ok) throw new Error("Ошибка при добавлении истории");
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "Ошибка при добавлении истории");
+            }
 
-            const updatedClient = await res.json();
-            onHistoryAdd(updatedClient.history); // обновляем историю на фронте
-            setTypeConnection("");
-            setSelectedStages([]);
-            setSelectedResults({});
-            setComment("");
+            const responseData = await res.json();
+
+            onHistoryAdd(responseData);
+
+
         } catch (err) {
             console.error(err);
-            alert("Не удалось сохранить историю");
+            alert(err.message || "Не удалось сохранить историю");
         }
     };
 
-    // Вычисляем завершенные этапы
     const completedStages = history?.reduce((acc, entry) => {
         entry.stages?.forEach(s => {
             if (!acc.includes(s.stage)) {
@@ -210,123 +82,139 @@ function AddHistoryForm({ clientId, history, onHistoryAdd }) {
     }, []) || [];
 
     return (
-        <div className={styles.container}>
-            {/* Дата */}
-            <div className={styles.column}>
-                <h4>Дата</h4>
-                <p>{date}</p>
+        <form onSubmit={handleSubmit} className={styles.formContainer}>
+            <div className={styles.header}>
+                <h2><FaPlus /> Добавить запись в историю</h2>
             </div>
 
-            {/* Вид связи */}
-            <div className={styles.column}>
-                <h4>Вид связи</h4>
-                {connectionOptions.map((el, i) => (
-                    <label key={i} className={styles.checkboxLabel}>
-                        <input
-                            type="radio"
-                            name="connection"
-                            value={el}
-                            checked={typeConnection === el}
-                            onChange={() => setTypeConnection(el)}
-                        />
-                        {el}
-                    </label>
-                ))}
-            </div>
+            <div className={styles.formGrid}>
+                {/* Дата */}
+                <div className={styles.formSection}>
+                    <div className={styles.sectionHeader}>
+                        <FaCalendarAlt className={styles.icon} />
+                        <h3>Дата</h3>
+                    </div>
+                    <div className={styles.dateDisplay}>{date}</div>
+                </div>
 
-            {/* Этапы */}
-            <div className={styles.column}>
-                <h4>Этапы</h4>
-
-                {/*{Object.keys(statusOptions).map((stage, i) => (*/}
-                {/*    <div*/}
-                {/*        key={i}*/}
-                {/*        className={styles.stageBlock}*/}
-                {/*        onMouseEnter={() => setHoveredStage(stage)}*/}
-                {/*        onMouseLeave={() => setHoveredStage(null)}*/}
-                {/*    >*/}
-                {/*        <label className={styles.checkboxLabel}>*/}
-                {/*            <input*/}
-                {/*                type="checkbox"*/}
-                {/*                checked={selectedStages.includes(stage)}*/}
-                {/*                onChange={() => toggleStage(stage)}*/}
-                {/*            />*/}
-                {/*            {stage}*/}
-                {/*        </label>*/}
-
-                {/*        {selectedStages.includes(stage) && hoveredStage === stage && (*/}
-                {/*            <div className={styles.resultsPopup}>*/}
-                {/*                {statusOptions[stage].map((result, j) => (*/}
-                {/*                    <label key={j} className={styles.checkboxLabel}>*/}
-                {/*                        <input*/}
-                {/*                            type="checkbox"*/}
-                {/*                            checked={selectedResults[stage]?.includes(result) || false}*/}
-                {/*                            onChange={() => toggleResult(stage, result)}*/}
-                {/*                        />*/}
-                {/*                        {result}*/}
-                {/*                    </label>*/}
-                {/*                ))}*/}
-                {/*            </div>*/}
-                {/*        )}*/}
-                {/*    </div>*/}
-                {/*))}*/}
-
-                {Object.keys(statusOptions).map((stage, i) => {
-                    const isCompleted = completedStages.includes(stage);
-
-                    return (
-                        <div
-                            key={i}
-                            className={`${styles.stageBlock} ${isCompleted ? styles.completedStage : ""}`}
-                            onMouseEnter={() => setHoveredStage(stage)}
-                            onMouseLeave={() => setHoveredStage(null)}
-                        >
-                            <label className={styles.checkboxLabel}>
+                {/* Вид связи */}
+                <div className={styles.formSection}>
+                    <div className={styles.sectionHeader}>
+                        <FaComment className={styles.icon} />
+                        <h3>Вид связи</h3>
+                    </div>
+                    <div className={styles.connectionGrid}>
+                        {connectionOptions.map((el, i) => (
+                            <label
+                                key={i}
+                                className={`${styles.radioLabel} ${typeConnection === el ? styles.checked : ''}`}
+                            >
                                 <input
-                                    type="checkbox"
-                                    checked={selectedStages.includes(stage)}
-                                    onChange={() => toggleStage(stage)}
-                                    disabled={isCompleted} // 👈 блокируем выбор
+                                    type="radio"
+                                    name="connection"
+                                    value={el}
+                                    checked={typeConnection === el}
+                                    onChange={() => setTypeConnection(el)}
+                                    className={styles.radioInput}
                                 />
-                                {stage}
+                                <span className={styles.radioCustom}></span>
+                                {el}
                             </label>
+                        ))}
+                    </div>
+                </div>
 
-                            {selectedStages.includes(stage) && hoveredStage === stage && (
-                                <div className={styles.resultsPopup}>
-                                    {statusOptions[stage].map((result, j) => (
-                                        <label key={j} className={styles.checkboxLabel}>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedResults[stage]?.includes(result) || false}
-                                                onChange={() => toggleResult(stage, result)}
-                                            />
-                                            {result}
-                                        </label>
-                                    ))}
+                {/* Этапы */}
+                <div className={styles.formSection}>
+                    <div className={styles.sectionHeader}>
+                        <FaCheck className={styles.icon} />
+                        <h3>Этапы</h3>
+                    </div>
+                    <div className={styles.stagesContainer}>
+                        {Object.keys(statusOptions).map((stage, i) => {
+                            const isCompleted = completedStages.includes(stage);
+                            const isSelected = selectedStages.includes(stage);
+
+                            return (
+                                <div
+                                    key={i}
+                                    className={`${styles.stageItem} 
+                                        ${isCompleted ? styles.completed : ''}
+                                        ${isSelected ? styles.selected : ''}`}
+                                    onMouseEnter={() => setHoveredStage(stage)}
+                                    onMouseLeave={() => setHoveredStage(null)}
+                                >
+                                    <label className={styles.stageLabel}>
+                                        <input
+                                            type="checkbox"
+                                            checked={isSelected}
+                                            onChange={() => toggleStage(stage)}
+                                            className={styles.checkboxInput}
+                                        />
+                                        <span className={styles.checkboxCustom}></span>
+                                        {stage}
+                                    </label>
+
+                                    {isSelected && hoveredStage === stage && (
+                                        <div className={styles.resultsDropdown}>
+                                            <div className={styles.resultsHeader}>Выберите результаты:</div>
+                                            {statusOptions[stage].map((result, j) => (
+                                                <label
+                                                    key={j}
+                                                    className={styles.resultItem}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedResults[stage]?.includes(result) || false}
+                                                        onChange={() => toggleResult(stage, result)}
+                                                        className={styles.resultCheckbox}
+                                                    />
+                                                    <span className={styles.resultCustom}></span>
+                                                    {result}
+                                                </label>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                    </div>
+                </div>
 
+                {/* Комментарий */}
+                <div className={styles.formSection}>
+                    <div className={styles.sectionHeader}>
+                        <FaComment className={styles.icon} />
+                        <h3>Комментарий</h3>
+                    </div>
+                    <textarea
+                        className={styles.commentTextarea}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="Введите комментарий к взаимодействию..."
+                        rows={4}
+                    />
+                </div>
             </div>
 
-            {/* Комментарий */}
-            <div className={styles.column} style={{ flexGrow: 1 }}>
-                <h4>Комментарий</h4>
-                <textarea
-                    className={styles.commentField}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Введите комментарий..."
-                />
+            {/* Кнопки */}
+            <div className={styles.formActions}>
+                <button
+                    type="button"
+                    className={styles.cancelButton}
+                    onClick={onCancel}
+                >
+                    Отмена
+                </button>
+                <button
+                    type="submit"
+                    className={styles.submitButton}
+                    disabled={!typeConnection || selectedStages.length === 0}
+                >
+                    <FaSave /> Сохранить
+                </button>
             </div>
-
-            {/* Кнопка */}
-            <div className={styles.column} style={{ alignSelf: "flex-end" }}>
-                <button onClick={handleSubmit}>Сохранить</button>
-            </div>
-        </div>
+        </form>
     );
 }
 

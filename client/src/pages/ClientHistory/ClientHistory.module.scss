@@ -1,55 +1,206 @@
+
+@import "../../variables.scss";
+
 .container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-  .head {
-    width: 100%;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid $border-color;
+
+  h2 {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 0 15px;
-
-    .date {
-      width: 10%;
-    }
-    .status {
-      width: 30%;
-    }
-    .connection {
-      width: 20%;
-    }
-    .message {
-      width: 60%;
-    }
-
-  }
-
-
-  .story {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    border: 1px solid #788fa8;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding: 0 15px;
-
-
-    p {
-    }
-
-    .storyDate {
-      width: 10%;
-    }
-    .storyStatus {
-      width: 25%;
-    }
-    .storyConnection {
-      width: 15%;
-    }
-    .storyMessage {
-      width: 55%;
-    }
+    gap: 10px;
+    color: $primary-color;
+    font-size: 1.5rem;
+    margin: 0;
   }
 }
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+}
+
+.statusWarning {
+  background: #fff8e6;
+  border-left: 4px solid #ffc107;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+
+  p {
+    margin: 0;
+    color: #856404;
+  }
+}
+
+.formContainer {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.storyCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  //transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.5s ease;
+
+  &.highlighted {
+    animation: highlightAnimation 2s ease-in-out;
+    box-shadow: 0 0 0 2px $accent-color;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+}
+
+.storyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f0f4f8;
+  border-bottom: 1px solid $border-color;
+}
+
+.storyDate {
+  font-weight: 600;
+  color: $text-dark;
+  font-size: 0.95rem;
+}
+
+.connectionBadge {
+  background: $accent-color;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.storyContent {
+  padding: 20px;
+}
+
+.stageBlock {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.stageTitle {
+  font-size: 1.05rem;
+  color: $primary-color;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.resultsList {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.resultItem {
+  padding: 6px 0;
+  color: $text-medium;
+  position: relative;
+  line-height: 1.5;
+
+  &::before {
+    content: "•";
+    color: $primary-color;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+}
+
+.commentSection {
+  padding: 15px 20px;
+  background: #f9f9f9;
+  border-top: 1px solid #f0f0f0;
+}
+
+.commentLabel {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.commentText {
+  margin: 0;
+  color: $text-dark;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+@keyframes highlightAnimation {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba($accent-color, 0.7);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px 10px rgba($accent-color, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 2px $accent-color;
+  }
+}
+
+$accent-color: #3a0ca3; // Пример цвета, можно изменить

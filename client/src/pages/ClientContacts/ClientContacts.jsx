@@ -10,7 +10,6 @@ function ClientContacts() {
         setUpdatedClient(client);
     }, [client]);
 
-
     return (
         <div className={styles.container}>
             <div className={styles.list}>
@@ -30,6 +29,7 @@ function ClientContacts() {
                             <p>Фамилия: {contact.lastName || '—'}</p>
                             <p>Должность: {contact.post || '—'}</p>
                             <p>Телефон: {contact.phone || '—'}</p>
+                            <p>WhatsApp: {contact.whatsApp || '—'}</p>
                             <p>Email: {contact.email || '—'}</p>
                         </div>
 
@@ -53,8 +53,6 @@ function ClientContacts() {
 
                 </div>
             </div>
-
-
         </div>
     );
 }

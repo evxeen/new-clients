@@ -69,8 +69,8 @@ function ClientList() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
 
-                    <Link className={styles.funnelButton} to="/funnel">Воронка</Link>
-                    <Link className={styles.funnelButton} to="/leads">Лиды</Link>
+                    {/*<Link className={styles.funnelButton} to="/funnel">Воронка</Link>*/}
+                    {/*<Link className={styles.funnelButton} to="/leads">Лиды</Link>*/}
                 </div>
 
                 <button className={styles.addButton} onClick={() => toggleForm(true)}>Добавить</button>
@@ -121,7 +121,7 @@ function ClientList() {
                             <h3>{client.company}</h3>
                         </div>
                         <p>Менеджер: {client.manager}</p>
-                        <p>Статус: {client.history.length === 0 ? 'История отсутствует' : client.history[client.history.length - 1].status}</p>
+                        {/*<p>Статус: {client.history.length === 0 ? 'История отсутствует' : client.history[client.history.length - 1].status}</p>*/}
                         <p>Регион: {client.region}</p>
                         <p>Категория: {getCategory(client)}</p>
                     </Link>
