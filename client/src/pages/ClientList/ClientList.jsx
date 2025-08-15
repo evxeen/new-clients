@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import styles from './ClientList.module.scss';
 import AddClientForm from "../../components/AddClientForm/AddClientForm.jsx";
 
-
 function ClientList() {
     const [clients, setClients] = useState([]);
     const [formIsOpen, setFormIsOpen] = useState(false);
@@ -30,7 +29,6 @@ function ClientList() {
     )];
     const uniqueRegions = [...new Set(clients.map(c => c.region).filter(Boolean))];
 
-    // определяем категорию клиента
     const getCategory = (client) => {
         if (client.mainStatus?.marriage) return "Отбракованные";
         if (client.mainStatus?.potential) return "Потенциальные";

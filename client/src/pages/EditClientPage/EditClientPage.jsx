@@ -151,6 +151,15 @@ function EditClientPage() {
 
                     <div className={styles.column}>
                         <div className={styles.field}>
+                            <label>Страна/Регион/Город:</label>
+                            <input name="country" value={client.country || ''} onChange={handleChange} placeholder='Страна'/>
+                            <input name="region" value={client.region || ''} onChange={handleChange} placeholder='Регион'/>
+                            <input name="city" value={client.city || ''} onChange={handleChange} placeholder='Город'/>
+                        </div>
+                    </div>
+
+                    <div className={styles.column}>
+                        <div className={styles.field}>
                             <label>Штат сотрудников:</label>
                             <input name="staff" value={client.staff || ''} onChange={handleChange}/>
                         </div>

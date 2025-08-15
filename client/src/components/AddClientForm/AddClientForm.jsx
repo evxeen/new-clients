@@ -106,7 +106,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
                         required
                     />
 
-                    <select value={country} onChange={e => setCountry(e.target.value)} required>
+                    <select value={country} onChange={e => setCountry(e.target.value)}>
                         <option value="" disabled>Выберите страну</option>
                         {countries.map(c => (
                             <option key={c.id} value={c.id}>{c.name}</option>
@@ -114,7 +114,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
                     </select>
 
                     {country && (
-                        <select value={region} onChange={e => setRegion(e.target.value)} required>
+                        <select value={region} onChange={e => setRegion(e.target.value)} >
                             <option value="" disabled>Выберите регион</option>
                             {regions.map(r => (
                                 <option key={r.id} value={r.id}>{r.name}</option>
@@ -123,7 +123,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
                     )}
 
                     {region && (
-                        <select value={city} onChange={e => setCity(e.target.value)} required>
+                        <select value={city} onChange={e => setCity(e.target.value)} >
                             <option value="" disabled>Выберите город</option>
                             {cities.map(c => (
                                 <option key={c.id} value={c.id}>{c.name}</option>
