@@ -54,6 +54,11 @@ function AddClientForm({ closeForm, onClientAdded }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Находим объекты по выбранным ID
+        const countryObj = countries.find(c => c.id === country);
+        const regionObj = regions.find(r => r.id === region);
+        const cityObj = cities.find(c => c.id === city);
+
         const newClient = {
             id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
             company,
@@ -61,9 +66,9 @@ function AddClientForm({ closeForm, onClientAdded }) {
             requirement,
             volume,
             code,
-            country, // сохраняем строкой
-            region,
-            city,
+            country: countryObj?.name || '',
+            region: regionObj?.name || '',
+            city: cityObj?.name || '',
             site,
             email,
             phone,
@@ -88,6 +93,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
             console.error('Ошибка добавления клиента:', err);
         }
     };
+
 
     return (
         <div className={styles.overlay}>
@@ -120,7 +126,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
                         <select value={city} onChange={e => setCity(e.target.value)} required>
                             <option value="" disabled>Выберите город</option>
                             {cities.map(c => (
-                                <option key={c.id} value={c.name}>{c.name}</option>
+                                <option key={c.id} value={c.id}>{c.name}</option>
                             ))}
                         </select>
                     )}
