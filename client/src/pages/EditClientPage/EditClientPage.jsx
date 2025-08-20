@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './EditClientPage.module.scss';
-import regionsData from '../../constants/regions.json';
 import AddContactForm from "../../components/AddContactForm/AddContactForm.jsx";
 
 const productOptions = [
@@ -14,13 +13,15 @@ function EditClientPage() {
     const [client, setClient] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [square, setSquare] = useState('');
+    const [square, setSquare] = useState("");
     const [unit , setUnit ] = useState('м');
     const [plusIsShow, setPlusIsShow] = useState(false);
     const [inputIsShow, setInputIsShow] = useState(false);
     const [newRequirement, setNewRequirement] = useState('');
     const [salesValue, setSalesValue] = useState("");
     const [salesUnit, setSalesUnit] = useState("");
+    const [newSupplier, setNewSupplier] = useState("");
+    const [inputSupIsShow, setInputSupIsShow] = useState(false);
 
     useEffect(() => {
         fetch(`/api/clients/${id}`)
@@ -40,6 +41,7 @@ function EditClientPage() {
                 console.error('Ошибка загрузки клиента:', err);
                 setLoading(false);
             });
+
     }, [id]);
 
     const handleSalesValueChange = (e) => {
@@ -90,6 +92,7 @@ function EditClientPage() {
         setClient(prev => ({...prev, contacts: [...update]}));
     }
 
+
     const handleSave = () => {
         fetch(`/api/clients/${id}`, {
             method: 'PUT',
@@ -99,6 +102,7 @@ function EditClientPage() {
             .then(res => res.json())
             .then(() => alert('Клиент обновлён'))
             .catch(err => console.error('Ошибка сохранения:', err));
+
     };
 
     const handleAddContact = (newContact) => {
@@ -117,9 +121,26 @@ function EditClientPage() {
         setNewRequirement('');
     }
 
+    const addNewSupplier = () => {
+        const newSup = {name: newSupplier, select: false};
+        setClient(prev => ({...prev, suppliers: [...client.suppliers, newSup]}));
+        setInputSupIsShow(false);
+        setNewSupplier("");
+    }
+
+    const handleSuppliersChange = (indexToSet) => {
+        setClient(prev => {
+            const updatedSuppliers = prev.suppliers.map((sup, index) =>
+                index === indexToSet ? { ...sup, select: !sup.select } : sup
+            );
+            return { ...prev, suppliers: updatedSuppliers };
+        });
+    };
 
     if (loading) return <p>Загрузка...</p>;
     if (!client) return <p>Клиент не найден</p>;
+
+
 
     return (
         <div className={styles.container}>
@@ -273,16 +294,37 @@ function EditClientPage() {
                         </select>
                     </div>
 
-
                     <div className={styles.column}>
                         <div className={styles.field}>
                             <label>Поставщики:</label>
-                            <input name="suppliers" value={client.suppliers || ''} onChange={handleChange}/>
+                            <div className={styles.productList}>
+                                {client.suppliers.map((el, index) => (
+                                    <span
+                                        key={index}
+                                        className={`${styles.productTag} ${el.select ? styles.selected : ''}`}
+                                        onClick={() => handleSuppliersChange(index)}
+                                    >
+                {el.name}
+            </span>
+                                ))}
+                                {inputSupIsShow ? (
+                                    <div>
+                                        <input
+                                            className={styles.requirementInput}
+                                            type="text"
+                                            value={newSupplier}
+                                            onChange={(e) => setNewSupplier(e.target.value)}
+                                        />
+                                        <button onClick={addNewSupplier}>✔</button>
+                                    </div>
+                                ) : (
+                                    <button onClick={() => setInputSupIsShow(!inputSupIsShow)}>+</button>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                 </div>
-
                 {/* Правая колонка */}
 
                 <div className={styles.column}>
@@ -391,6 +433,14 @@ function EditClientPage() {
                             <option value="" disabled>Выберите</option>
                             <option value="Капуза Виктор">Капуза Виктор</option>
                             <option value="Петоченко Светлана">Петоченко Светлана</option>
+                            <option value="Кучерина Ольга">Кучерина Ольга</option>
+                            <option value="Ковальчук Наталья">Ковальчук Наталья</option>
+                            <option value="Кострома Наталья">Кострома Наталья</option>
+                            <option value="Зайцева Татьяна">Зайцева Татьяна</option>
+                            <option value="Тямчик Татьяна">Тямчик Татьяна</option>
+                            <option value="Лобан Елена">Лобан Елена</option>
+                            <option value="Кузьменок Татьяна">Лобан Елена</option>
+                            <option value="Лысенко Евгений">Лысенко Евгений</option>
                         </select>
                     </div>
 
