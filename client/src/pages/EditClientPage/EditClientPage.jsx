@@ -62,8 +62,6 @@ function EditClientPage() {
         }));
     };
 
-
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setClient(prev => {
@@ -91,7 +89,6 @@ function EditClientPage() {
 
         setClient(prev => ({...prev, contacts: [...update]}));
     }
-
 
     const handleSave = () => {
         fetch(`/api/clients/${id}`, {
@@ -139,8 +136,6 @@ function EditClientPage() {
 
     if (loading) return <p>Загрузка...</p>;
     if (!client) return <p>Клиент не найден</p>;
-
-
 
     return (
         <div className={styles.container}>
