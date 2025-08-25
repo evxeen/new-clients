@@ -50,7 +50,24 @@ module.exports = {
                     createDate: getCurrentFormattedDate(),
                     ...req.body,
                     address: '',
-                    suppliers: [],
+                    suppliers: [
+                        {
+                            "name": "Китай",
+                            "select": false
+                        },
+                        {
+                            "name": "РФ производитель",
+                            "select": false
+                        },
+                        {
+                            "name": "РФ поставщик",
+                            "select": false
+                        },
+                        {
+                            "name": "Наши дилеры",
+                            "select": false
+                        }
+                    ],
                     contacts: [],
                     history: [],
                     staff: '',
@@ -295,13 +312,22 @@ module.exports = {
 
     getCities: async (req, res) => {
         try {
-            const { regionId } = req.query;
-            if (!regionId) return res.status(400).json({ error: 'Не передан regionId' });
+            const { regionId, countryId } = req.query;
 
-            const cities = await prisma.city.findMany({
-                where: { regionId: BigInt(regionId) },
-                orderBy: { name: 'asc' }
-            });
+            let cities;
+            if (regionId) {
+                cities = await prisma.city.findMany({
+                    where: { regionId: BigInt(regionId) },
+                    orderBy: { name: 'asc' }
+                });
+            } else if (countryId) {
+                cities = await prisma.city.findMany({
+                    where: { region: { countryId: BigInt(countryId) } },
+                    orderBy: { name: 'asc' }
+                });
+            } else {
+                return res.status(400).json({ error: 'Не передан regionId или countryId' });
+            }
 
             const safeCities = cities.map(c => ({
                 ...c,

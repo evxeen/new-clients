@@ -42,14 +42,29 @@ function AddClientForm({ closeForm, onClientAdded }) {
             .catch(err => console.error('Ошибка загрузки регионов:', err));
     }, [country]);
 
-    // загрузка городов при выборе региона
+    // useEffect(() => {
+    //     if (!region) return;
+    //     fetch(`/api/clients/cities?regionId=${region}`)
+    //         .then(res => res.json())
+    //         .then(data => setCities(data))
+    //         .catch(err => console.error('Ошибка загрузки городов:', err));
+    // }, [country]);
+
     useEffect(() => {
-        if (!region) return;
-        fetch(`/api/clients/cities?regionId=${region}`)
+        if (!country) return;
+
+        let url;
+        if (region) {
+            url = `/api/clients/cities?regionId=${region}`;
+        } else {
+            url = `/api/clients/cities?countryId=${country}`;
+        }
+
+        fetch(url)
             .then(res => res.json())
             .then(data => setCities(data))
             .catch(err => console.error('Ошибка загрузки городов:', err));
-    }, [region]);
+    }, [country, region]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,7 +137,7 @@ function AddClientForm({ closeForm, onClientAdded }) {
                         </select>
                     )}
 
-                    {region && (
+                    {country && (
                         <select value={city} onChange={e => setCity(e.target.value)} >
                             <option value="" disabled>Выберите город</option>
                             {cities.map(c => (

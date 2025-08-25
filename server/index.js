@@ -25,11 +25,11 @@ app.get(/\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
-// // Запуск сервера
-// app.listen(PORT, '0.0.0.0', () => {
-//     console.log(`Сервер запущен на http://localhost:${PORT}`);
-// });
-
-app.listen(PORT, '127.0.0.1', () => {
+// Запуск сервера
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
+
+// app.listen(PORT, '127.0.0.1', () => {
+//     console.log(`Сервер запущен на http://localhost:${PORT}`);
+// });
