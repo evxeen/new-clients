@@ -27,7 +27,7 @@ function ClientList() {
     const uniqueStatuses = [...new Set(
         clients.map(c => c.history?.[c.history.length - 1]?.status).filter(Boolean)
     )];
-    const uniqueRegions = [...new Set(clients.map(c => c.region).filter(Boolean))];
+    const uniqueRegions = [...new Set(clients.map(c => c.country).filter(Boolean))];
 
     const getCategory = (client) => {
         if (client.mainStatus?.marriage) return "Отбракованные";
@@ -42,7 +42,7 @@ function ClientList() {
         return (
             (managerFilter === 'all' || client.manager === managerFilter) &&
             (statusFilter === 'all' || lastStatus === statusFilter) &&
-            (regionFilter === 'all' || client.region === regionFilter) &&
+            (regionFilter === 'all' || client.country === regionFilter) &&
             (categoryFilter === 'all' || category === categoryFilter) &&
             client.company.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -90,7 +90,7 @@ function ClientList() {
                 </select>
 
                 <select value={regionFilter} onChange={(e) => setRegionFilter(e.target.value)}>
-                    <option value="all">Все регионы</option>
+                    <option value="all">Все страны</option>
                     {uniqueRegions.map(region => (
                         <option key={region} value={region}>{region}</option>
                     ))}

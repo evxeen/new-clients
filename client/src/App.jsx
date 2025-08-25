@@ -11,17 +11,17 @@ import LeadsPage from "./pages/LeadsPage/LeadsPage.jsx";
 
 function App() {
   return (
-      <div className={ styles.container }>
+      <div className={styles.container}>
           <Router>
               <Routes>
-                  <Route path="/" element={<ClientList />} />
-                  <Route path="/funnel" element={<FunnelPage />} />
-                  <Route path="/leads" element={<LeadsPage />} />
-                  <Route path="/client/:id" element={<ClientDetail />} >
-                      <Route index element={<ClientMainInfo />} />
-                      <Route path="history" element={<ClientHistory />} />
-                      <Route path="contacts" element={<ClientContacts />} />
-                      <Route path="edit" element={<EditClientPage />} />
+                  <Route path="/" element={<ClientList/>}/>
+                  <Route path="/funnel" element={<FunnelPage/>}/>
+                  <Route path="/leads" element={<LeadsPage/>}/>
+                  <Route path="/client/:id" element={<ClientDetail/>}>
+                      <Route index element={<ClientMainInfo/>}/>
+                      <Route path="history" element={<ClientHistory/>}/>
+                      <Route path="contacts" element={<ClientContacts/>}/>
+                      <Route path="edit" element={<EditClientPage/>}/>
                   </Route>
               </Routes>
           </Router>

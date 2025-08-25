@@ -42,14 +42,6 @@ function AddClientForm({ closeForm, onClientAdded }) {
             .catch(err => console.error('Ошибка загрузки регионов:', err));
     }, [country]);
 
-    // useEffect(() => {
-    //     if (!region) return;
-    //     fetch(`/api/clients/cities?regionId=${region}`)
-    //         .then(res => res.json())
-    //         .then(data => setCities(data))
-    //         .catch(err => console.error('Ошибка загрузки городов:', err));
-    // }, [country]);
-
     useEffect(() => {
         if (!country) return;
 
@@ -130,7 +122,8 @@ function AddClientForm({ closeForm, onClientAdded }) {
 
                     {country && (
                         <select value={region} onChange={e => setRegion(e.target.value)} >
-                            <option value="" disabled>Выберите регион</option>
+                            {/*<option value="" disabled>Выберите регион</option>*/}
+                            <option value="">Без региона</option>
                             {regions.map(r => (
                                 <option key={r.id} value={r.id}>{r.name}</option>
                             ))}

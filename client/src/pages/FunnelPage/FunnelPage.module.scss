@@ -813,6 +813,10 @@
   font-weight: 500;
   min-width: 50px;
 
+  &.выполнено {
+    background-color: rgba(40, 167, 69, 0.2);
+  }
+
   &:hover {
     background: rgba(0, 0, 0, 0.03) !important;
   }

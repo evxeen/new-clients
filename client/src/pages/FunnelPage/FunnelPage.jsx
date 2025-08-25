@@ -60,7 +60,7 @@ function FunnelPage() {
 
     const handleFilterChange = (step, value) => {
         setFilters(prev => ({ ...prev, [step]: value }));
-        setActiveFilter(null); // Закрываем попап после выбора
+        setActiveFilter(null);
     };
 
     const filteredClients = clients.filter(client => {
