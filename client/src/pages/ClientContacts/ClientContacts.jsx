@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "./ClientContacts.module.scss";
-import {useOutletContext} from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 function ClientContacts() {
     const { client } = useOutletContext();
@@ -18,7 +18,9 @@ function ClientContacts() {
                 <p><strong>Электронная почта компании:</strong> {client.email}</p>
                 <p><strong>Номер телефона компании:</strong> {client.phone}</p>
                 <p><strong>Контактные лица:</strong></p>
+
                 <div className={styles.managersList}>
+
                     {updatedClient.contacts.length !== 0 ? updatedClient.contacts.map((contact, index) => (
                         <div
                             onClick={() => handleSetMainContact(index)}
@@ -32,24 +34,7 @@ function ClientContacts() {
                             <p>WhatsApp: {contact.whatsApp || '—'}</p>
                             <p>Email: {contact.email || '—'}</p>
                         </div>
-
                     )) : 'Список пуст '}
-                    <div
-                        className={styles.addIcon}
-                        onClick={() => setShowModal(true)}
-                        title="Добавить контакт"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className={styles.icon}
-                            viewBox="0 0 24 24"
-                        >
-                            <g fill="none" stroke="currentColor" strokeWidth="2">
-                                <path strokeLinecap="round" d="M12 8v4m0 0v4m0-4h4m-4 0H8"/>
-                                <circle cx="12" cy="12" r="10"/>
-                            </g>
-                        </svg>
-                    </div>
 
                 </div>
             </div>

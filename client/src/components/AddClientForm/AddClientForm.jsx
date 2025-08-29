@@ -101,7 +101,6 @@ function AddClientForm({ closeForm, onClientAdded }) {
         }
     };
 
-
     return (
         <div className={styles.overlay}>
             <form className={styles.addForm} onSubmit={handleSubmit}>

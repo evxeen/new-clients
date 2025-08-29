@@ -419,6 +419,7 @@ function EditClientPage() {
                                 радио, газеты)
                             </option>
                             <option value="Партнёрская программа">Партнёрская программа</option>
+                            <option value="Обратился сам">Обратился сам</option>
                         </select>
                     </div>
 

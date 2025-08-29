@@ -35,6 +35,10 @@ function ClientHistory() {
         setFormIsVisible(false);
     };
 
+    const changeHistory = (id) => {
+        const findHistory = history.find(item => item.id === id);
+    }
+
     const currentMainStatus = Object.keys(client.mainStatus || {})[0];
 
     return (
@@ -83,6 +87,7 @@ function ClientHistory() {
                             className={`${styles.storyCard} ${
                                 highlightedId === entry.id ? styles.highlighted : ''
                             }`}
+                            onClick={() => changeHistory(entry.id)}
                         >
                             <div className={styles.storyHeader}>
                                 <span className={styles.storyDate}>{entry.date}</span>

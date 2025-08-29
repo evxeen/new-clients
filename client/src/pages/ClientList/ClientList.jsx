@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import styles from './ClientList.module.scss';
 import AddClientForm from "../../components/AddClientForm/AddClientForm.jsx";
 
@@ -12,12 +14,22 @@ function ClientList() {
     const [regionFilter, setRegionFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
 
+    const location = useLocation();
+    const queryParams = queryString.parse(location.search);
+
     useEffect(() => {
         fetch('/api/clients')
             .then((res) => res.json())
             .then((data) => setClients(data.reverse()))
             .catch((err) => console.error('Ошибка загрузки клиентов:', err));
     }, []);
+
+    // Если есть параметр region, сразу устанавливаем фильтр
+    useEffect(() => {
+        if (queryParams.region) {
+            setRegionFilter(queryParams.region);
+        }
+    }, [queryParams]);
 
     const toggleForm = (isOpen) => {
         setFormIsOpen(isOpen);
