@@ -12,10 +12,8 @@ function ClientHistory() {
 
     useEffect(() => {
         if (client.history) {
-            const historyArray = Object.values(client.history)
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            setHistory(historyArray.reverse());
+            const historyArray = Object.values(client.history).reverse();
+            setHistory(historyArray);
         } else {
             setHistory([]);
         }

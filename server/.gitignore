@@ -1,6 +1,6 @@
 # Node modules
-../node_modules/
-
+node_modules
+../.idea/
 # Build artifacts
 build/
 dist/
@@ -19,7 +19,6 @@ yarn-error.log*
 # Editor and OS specific files
 .DS_Store
 .vscode/
-.idea/
 
 # Other temporary files
 tmp/
@@ -27,3 +26,5 @@ temp/
 
 db.json
 /generated/prisma
+prisma
+Client.csv

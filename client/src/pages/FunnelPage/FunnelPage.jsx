@@ -41,6 +41,7 @@ function FunnelPage() {
     const [archiveFilter, setArchiveFilter] = useState("all");
     const [activeFilter, setActiveFilter] = useState(null);
     const [expandedStages, setExpandedStages] = useState({});
+    const [managerFilter, setManagerFilter] = useState("all");
 
     const toggleStageExpansion = (stage) => {
         setExpandedStages(prev => ({
@@ -66,9 +67,11 @@ function FunnelPage() {
     const filteredClients = clients.filter(client => {
         if (archiveFilter !== "all") {
             const statusKey = Object.keys(client.mainStatus || {})[0];
-            if (statusKey !== archiveFilter) {
-                return false;
-            }
+            if (statusKey !== archiveFilter) return false;
+        }
+
+        if (managerFilter !== "all" && client.manager !== managerFilter) {
+            return false;
         }
 
         const pipeline = getPipelineStatuses(client.history || []);
@@ -85,12 +88,16 @@ function FunnelPage() {
     const resetFilters = () => {
         setFilters({});
         setArchiveFilter("all");
+        setManagerFilter("all");
         setActiveFilter(null);
-    }
+    };
 
     const isFilterActive = () => {
         return archiveFilter !== "all" || Object.values(filters).some(f => f && f !== "all");
     }
+
+    const managers = [...new Set(clients.map(client => client.manager).filter(Boolean))];
+
 
     return (
         <div className={styles.funnelPage}>
@@ -114,12 +121,26 @@ function FunnelPage() {
                         </select>
                     </div>
 
+                    <div className={styles.managerFilter}>
+                        <label>Исполнитель:</label>
+                        <select
+                            value={managerFilter}
+                            onChange={e => setManagerFilter(e.target.value)}
+                            className={managerFilter !== "all" ? styles.activeFilter : ""}
+                        >
+                            <option value="all">Все</option>
+                            {managers.map((manager, i) => (
+                                <option key={i} value={manager}>{manager}</option>
+                            ))}
+                        </select>
+                    </div>
+
                     <button
                         onClick={resetFilters}
                         className={`${styles.resetButton} ${isFilterActive() ? styles.active : ''}`}
                         disabled={!isFilterActive()}
                     >
-                        <FaRedo /> Сбросить фильтры
+                        <FaRedo/> Сбросить фильтры
                     </button>
                 </div>
             </div>

@@ -41,10 +41,6 @@ function ClientMainInfo() {
         }
     }
 
-    switch (mainStatus) {
-
-    }
-
     let status = (() => {
         switch (Object.keys(mainStatus)[0]) {
             case "active":
