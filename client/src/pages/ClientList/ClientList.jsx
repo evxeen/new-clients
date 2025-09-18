@@ -18,6 +18,38 @@ function ClientList() {
     const queryParams = queryString.parse(location.search);
 
     useEffect(() => {
+        const fetchClients = async () => {
+            try {
+                const token = localStorage.getItem("token");
+
+                const res = await fetch("/api/clients", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    console.error("Ошибка сервера:", data);
+                    return;
+                }
+
+                if (!Array.isArray(data)) {
+                    console.error("Ожидался массив клиентов, а пришло:", data);
+                    return;
+                }
+
+                setClients(data.reverse());
+            } catch (err) {
+                console.error("Ошибка загрузки клиентов:", err);
+            }
+        };
+
+        fetchClients();
+    }, []);
+
+    useEffect(() => {
         fetch('/api/clients')
             .then((res) => res.json())
             .then((data) => setClients(data.reverse()))
@@ -59,6 +91,7 @@ function ClientList() {
             client.company.toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
+
 
     return (
         <div className={styles.containerContent}>

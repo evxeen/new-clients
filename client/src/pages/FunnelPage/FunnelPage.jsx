@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from "../../api.js";
 import { Link } from "react-router-dom";
 import styles from './FunnelPage.module.scss';
 import { FaFilter, FaTimes, FaRedo } from "react-icons/fa";
@@ -51,9 +52,10 @@ function FunnelPage() {
     };
 
     useEffect(() => {
-        fetch('/api/clients')
-            .then(res => res.json())
-            .then(data => setClients(data))
+        api.get('/api/clients') // тут токен автоматически добавится
+            .then(res => {
+                setClients(res.data);
+            })
             .catch(err => console.error('Ошибка загрузки клиентов:', err));
     }, []);
 

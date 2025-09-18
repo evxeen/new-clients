@@ -28,3 +28,5 @@ db.json
 /generated/prisma
 prisma
 Client.csv
+seed.js
+seedUsers.js

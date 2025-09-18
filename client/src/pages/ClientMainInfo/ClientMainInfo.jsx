@@ -65,8 +65,8 @@ function ClientMainInfo() {
                 <p><strong>Менеджер:</strong> {client.manager}</p>
                 <p><strong>Дата создания карточки:</strong> {client.createDate}</p>
                 <p><strong>Статус:</strong> {status}</p>
-
             </div>
+
             <div className={styles.buttons}>
                 <button onClick={() => handleSetMainStatus("potential")}>Потенциальный</button>
                 <button onClick={() => handleSetMainStatus("marriage")}>Брак</button>

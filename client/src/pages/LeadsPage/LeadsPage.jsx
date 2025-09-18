@@ -12,7 +12,6 @@ function LeadsPage() {
             .catch(console.error);
     }, []);
 
-    console.log(leads)
 
     return (
         <div className={styles.container}>
