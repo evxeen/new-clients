@@ -20,12 +20,10 @@ function AddClientForm({ closeForm, onClientAdded }) {
     const [authority, setAuthority] = useState('');
     const [manager, setManager] = useState('');
 
-    // справочники
     const [countries, setCountries] = useState([]);
     const [regions, setRegions] = useState([]);
     const [cities, setCities] = useState([]);
 
-    // загрузка стран
     useEffect(() => {
         fetch('/api/clients/countries')
             .then(res => res.json())
@@ -33,7 +31,6 @@ function AddClientForm({ closeForm, onClientAdded }) {
             .catch(err => console.error('Ошибка загрузки стран:', err));
     }, []);
 
-    // загрузка регионов при выборе страны
     useEffect(() => {
         if (!country) return;
         fetch(`/api/clients/regions?countryId=${country}`)
@@ -58,14 +55,56 @@ function AddClientForm({ closeForm, onClientAdded }) {
             .catch(err => console.error('Ошибка загрузки городов:', err));
     }, [country, region]);
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //
+    //     const countryObj = countries.find(c => c.id === country);
+    //     const regionObj = regions.find(r => r.id === region);
+    //     const cityObj = cities.find(c => c.id === city);
+    //
+    //     const newClient = {
+    //         id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
+    //         company,
+    //         activity,
+    //         requirement,
+    //         volume,
+    //         code,
+    //         country: countryObj?.name || '',
+    //         region: regionObj?.name || '',
+    //         city: cityObj?.name || '',
+    //         site,
+    //         email,
+    //         phone,
+    //         director,
+    //         authority,
+    //         manager,
+    //         history: []
+    //     };
+    //
+    //     try {
+    //         const res = await fetch('/api/clients', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(newClient),
+    //         });
+    //         const data = await res.json();
+    //
+    //         if (onClientAdded) onClientAdded(data);
+    //         closeForm(false);
+    //         navigate(`/client/${data.id}/edit`);
+    //     } catch (err) {
+    //         console.error('Ошибка добавления клиента:', err);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Находим объекты по выбранным ID
         const countryObj = countries.find(c => c.id === country);
         const regionObj = regions.find(r => r.id === region);
         const cityObj = cities.find(c => c.id === city);
 
+        // Формируем клиента без managerId — сервер его подставит
         const newClient = {
             id: Math.floor(Math.random() * (2_000_000_000 - 1_000_000) + 1_000_000),
             company,
@@ -81,16 +120,27 @@ function AddClientForm({ closeForm, onClientAdded }) {
             phone,
             director,
             authority,
-            manager,
             history: []
         };
 
         try {
+            const token = localStorage.getItem('token'); // берём токен из localStorage
+
+
             const res = await fetch('/api/clients', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // токен для authMiddleware
+                },
                 body: JSON.stringify(newClient),
             });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'Ошибка добавления клиента');
+            }
+
             const data = await res.json();
 
             if (onClientAdded) onClientAdded(data);
@@ -98,8 +148,24 @@ function AddClientForm({ closeForm, onClientAdded }) {
             navigate(`/client/${data.id}/edit`);
         } catch (err) {
             console.error('Ошибка добавления клиента:', err);
+            alert(err.message); // чтобы увидеть на фронте
         }
+        // try {
+            //         const res = await fetch('/api/clients', {
+            //             method: 'POST',
+            //             headers: { 'Content-Type': 'application/json' },
+            //             body: JSON.stringify(newClient),
+            //         });
+            //         const data = await res.json();
+            //
+            //         if (onClientAdded) onClientAdded(data);
+            //         closeForm(false);
+            //         navigate(`/client/${data.id}/edit`);
+            //     } catch (err) {
+            //         console.error('Ошибка добавления клиента:', err);
+            //     }
     };
+
 
     return (
         <div className={styles.overlay}>

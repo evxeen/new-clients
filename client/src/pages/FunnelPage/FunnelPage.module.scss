@@ -1026,3 +1026,136 @@
     font-size: 1rem;
   }
 }
+
+.dateFilter {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dateFilterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f0f2f5;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  color: $text-medium;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+
+  &:hover {
+    background: #e2e6ea;
+  }
+
+  &.activeFilter {
+    border-color: $accent-color;
+    background: rgba($accent-color, 0.1);
+    color: $accent-color;
+  }
+}
+
+.dateFilterPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 100;
+  margin-top: 5px;
+  min-width: 280px;
+}
+
+.dateInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dateInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  label {
+    font-weight: 500;
+    color: $text-medium;
+    min-width: 30px;
+  }
+
+  input {
+    padding: 8px 12px;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background: white;
+    flex-grow: 1;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+.dateFilterActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resetDateButton {
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  color: $text-medium;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+
+  &:hover:not(:disabled) {
+    background: #e9ecef;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.createDate {
+  font-size: 0.75rem;
+  color: $text-medium;
+  margin-top: 4px;
+}
+
+// Адаптивные стили для дата фильтра
+@media (max-width: 768px) {
+  .dateFilterPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .dateInputs {
+    flex-direction: column;
+  }
+
+  .dateInputGroup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    input {
+      width: 100%;
+    }
+  }
+}

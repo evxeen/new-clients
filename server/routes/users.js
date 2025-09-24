@@ -30,6 +30,4 @@ router.get('/', auth, requireRole('ADMIN'), async (req, res) => {
 
 // Получить все СВОИХ клиентов
 
-
-
 module.exports = router;

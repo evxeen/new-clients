@@ -43,49 +43,9 @@ function App() {
     if (loading) return <div>Загрузка...</div>;
     if (!user) return <LoginPage onLogin={handleLogin} />;
 
-
-    // return (
-  //     <div className={styles.container}>
-  //         <Router>
-  //             <Routes>
-  //                 <Route path="/" element={<ClientList/>}/>
-  //                 <Route path="/funnel" element={<FunnelPage/>}/>
-  //                 <Route path="/leads" element={<LeadsPage/>}/>
-  //                 <Route path="/client/:id" element={<ClientDetail/>}>
-  //                     <Route index element={<ClientMainInfo/>}/>
-  //                     <Route path="history" element={<ClientHistory/>}/>
-  //                     <Route path="contacts" element={<ClientContacts/>}/>
-  //                     <Route path="edit" element={<EditClientPage/>}/>
-  //                 </Route>
-  //             </Routes>
-  //         </Router>
-  //     </div>
-  // );
-  //   return (
-  //       <div className="p-4">
-  //           <header className="flex items-center justify-between mb-4">
-  //               <div>
-  //                   <h1>Добро пожаловать, {user.name}!</h1>
-  //                   <div>Роль: {user.role}</div>
-  //               </div>
-  //               <div>
-  //                   <button onClick={logout} className="bg-red-500 text-white px-3 py-1 rounded">
-  //                       Выйти
-  //                   </button>
-  //               </div>
-  //           </header>
-  //
-  //           <main>
-  //               {/* заглушки для ролей — позже подставим полноценные роуты */}
-  //               {user.role === 'ADMIN' && <div>Панель администратора</div>}
-  //               {user.role === 'LEAD' && <div>Аналитика (руководитель)</div>}
-  //               {user.role === 'SUPERMANAGER' && <div>Суперменеджер — все клиенты</div>}
-  //               {user.role === 'MANAGER' && <div>Менеджер — мои клиенты</div>}
-  //           </main>
-  //       </div>
-  //   );
     return (
             <div className={styles.container}>
+
                 <Router>
                     <Routes>
                         {/* login доступен всегда */}

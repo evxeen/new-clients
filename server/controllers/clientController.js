@@ -75,7 +75,9 @@ module.exports = {
                     warehouses: [],
                     customers: '',
                     salesVolume: '',
-                    sourceLid:''
+                    sourceLid:'',
+                    manager: 'Менеджер',
+                    managerId: req.user.role === "MANAGER" ? req.user.id : null,
                 }
             });
 

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import styles from './ClientList.module.scss';
 import AddClientForm from "../../components/AddClientForm/AddClientForm.jsx";
+import {getLastHistoryDate} from "../../../helpers/sortOnDataClients.js";
 
 function ClientList() {
     const [clients, setClients] = useState([]);
@@ -35,12 +36,22 @@ function ClientList() {
                     return;
                 }
 
-                if (!Array.isArray(data)) {
-                    console.error("Ожидался массив клиентов, а пришло:", data);
-                    return;
-                }
+                // if (!Array.isArray(data)) {
+                //     console.error("Ожидался массив клиентов, а пришло:", data);
+                //     return;
+                // }
 
-                setClients(data.reverse());
+                // сортируем по последней дате истории
+                const sorted = [...data].sort((a, b) => {
+                    const dateA = getLastHistoryDate(a);
+                    const dateB = getLastHistoryDate(b);
+                    if (!dateA && !dateB) return 0;
+                    if (!dateA) return 1;
+                    if (!dateB) return -1;
+                    return dateB - dateA; // новее → выше
+                });
+
+                setClients(sorted);
             } catch (err) {
                 console.error("Ошибка загрузки клиентов:", err);
             }
@@ -49,12 +60,12 @@ function ClientList() {
         fetchClients();
     }, []);
 
-    useEffect(() => {
-        fetch('/api/clients')
-            .then((res) => res.json())
-            .then((data) => setClients(data.reverse()))
-            .catch((err) => console.error('Ошибка загрузки клиентов:', err));
-    }, []);
+    // useEffect(() => {
+    //     fetch('/api/clients')
+    //         .then((res) => res.json())
+    //         .then((data) => setClients(data.reverse()))
+    //         .catch((err) => console.error('Ошибка загрузки клиентов:', err));
+    // }, []);
 
     // Если есть параметр region, сразу устанавливаем фильтр
     useEffect(() => {
@@ -91,7 +102,6 @@ function ClientList() {
             client.company.toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
-
 
     return (
         <div className={styles.containerContent}>

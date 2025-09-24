@@ -6,12 +6,11 @@ const  authMiddleware  = require("../middleware/auth") ;
 
 const prisma = new PrismaClient();
 
-
 router.get("/", authMiddleware, async (req, res) => {
     try {
         let clients;
 
-        if (req.user.role === "ADMIN" || req.user.role === "SUPERMANAGER") {
+        if (req.user.role === "ADMIN" || req.user.role === "LEAD" || req.user.role === "SUPERMANAGER") {
             // видят всех
             const clients = await prisma.client.findMany({
                 include: {
@@ -52,10 +51,6 @@ router.put('/:id/main-status', clientController.updateMainStatus);
 // router.get('/', clientController.getAllClients);
 // routes/clients.js
 
-// список клиентов
-
-
-
-router.post('/', clientController.createClient);
+router.post('/', authMiddleware, clientController.createClient);
 
 module.exports = router;

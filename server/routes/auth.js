@@ -39,6 +39,7 @@ router.post("/login", async (req, res) => {
     const token = generateToken(user);
 
     res.json({ token, user: { id: user.id, name: user.name, role: user.role } });
+    console.log(user.id, user.role, user.name)
 });
 
 // Текущий пользователь

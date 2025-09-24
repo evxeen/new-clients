@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from "../../api.js";
 import { Link } from "react-router-dom";
 import styles from './FunnelPage.module.scss';
-import { FaFilter, FaTimes, FaRedo } from "react-icons/fa";
+import { FaFilter, FaTimes, FaRedo, FaCalendarAlt } from "react-icons/fa";
 import { statusOptions } from "../../constants/historyOptions.js";
 
 const historyToArray = (history) => {
@@ -43,6 +43,8 @@ function FunnelPage() {
     const [activeFilter, setActiveFilter] = useState(null);
     const [expandedStages, setExpandedStages] = useState({});
     const [managerFilter, setManagerFilter] = useState("all");
+    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+    const [showDateFilter, setShowDateFilter] = useState(false);
 
     const toggleStageExpansion = (stage) => {
         setExpandedStages(prev => ({
@@ -52,7 +54,7 @@ function FunnelPage() {
     };
 
     useEffect(() => {
-        api.get('/api/clients') // тут токен автоматически добавится
+        api.get('/api/clients')
             .then(res => {
                 setClients(res.data);
             })
@@ -66,6 +68,19 @@ function FunnelPage() {
         setActiveFilter(null);
     };
 
+    const handleDateChange = (field, value) => {
+        setDateFilter(prev => ({ ...prev, [field]: value }));
+    };
+
+    const resetDateFilter = () => {
+        setDateFilter({ from: '', to: '' });
+        setShowDateFilter(false);
+    };
+
+    const isDateFilterActive = () => {
+        return dateFilter.from !== '' || dateFilter.to !== '';
+    };
+
     const filteredClients = clients.filter(client => {
         if (archiveFilter !== "all") {
             const statusKey = Object.keys(client.mainStatus || {})[0];
@@ -74,6 +89,23 @@ function FunnelPage() {
 
         if (managerFilter !== "all" && client.manager !== managerFilter) {
             return false;
+        }
+
+        // Фильтр по дате создания
+        if (isDateFilterActive()) {
+            const clientDate = new Date(client.createDate);
+
+            if (dateFilter.from) {
+                const fromDate = new Date(dateFilter.from);
+                fromDate.setHours(0, 0, 0, 0);
+                if (clientDate < fromDate) return false;
+            }
+
+            if (dateFilter.to) {
+                const toDate = new Date(dateFilter.to);
+                toDate.setHours(23, 59, 59, 999);
+                if (clientDate > toDate) return false;
+            }
         }
 
         const pipeline = getPipelineStatuses(client.history || []);
@@ -91,15 +123,19 @@ function FunnelPage() {
         setFilters({});
         setArchiveFilter("all");
         setManagerFilter("all");
+        setDateFilter({ from: '', to: '' });
+        setShowDateFilter(false);
         setActiveFilter(null);
     };
 
     const isFilterActive = () => {
-        return archiveFilter !== "all" || Object.values(filters).some(f => f && f !== "all");
-    }
+        return archiveFilter !== "all" ||
+            managerFilter !== "all" ||
+            Object.values(filters).some(f => f && f !== "all") ||
+            isDateFilterActive();
+    };
 
     const managers = [...new Set(clients.map(client => client.manager).filter(Boolean))];
-
 
     return (
         <div className={styles.funnelPage}>
@@ -109,6 +145,47 @@ function FunnelPage() {
                 </Link>
 
                 <div className={styles.controls}>
+                    <div className={styles.dateFilter}>
+                        <button
+                            className={`${styles.dateFilterButton} ${isDateFilterActive() ? styles.activeFilter : ''}`}
+                            onClick={() => setShowDateFilter(!showDateFilter)}
+                        >
+                            <FaCalendarAlt /> Дата создания
+                        </button>
+
+                        {showDateFilter && (
+                            <div className={styles.dateFilterPopup}>
+                                <div className={styles.dateInputs}>
+                                    <div className={styles.dateInputGroup}>
+                                        <label>От:</label>
+                                        <input
+                                            type="date"
+                                            value={dateFilter.from}
+                                            onChange={e => handleDateChange('from', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className={styles.dateInputGroup}>
+                                        <label>До:</label>
+                                        <input
+                                            type="date"
+                                            value={dateFilter.to}
+                                            onChange={e => handleDateChange('to', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.dateFilterActions}>
+                                    <button
+                                        onClick={resetDateFilter}
+                                        className={styles.resetDateButton}
+                                        disabled={!isDateFilterActive()}
+                                    >
+                                        Сбросить даты
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <div className={styles.archiveFilter}>
                         <label>Статус клиента:</label>
                         <select
@@ -212,6 +289,9 @@ function FunnelPage() {
                                     <Link className={styles.nameLink} to={`/client/${client.id}`}>
                                         {client.company}
                                     </Link>
+                                    <div className={styles.createDate}>
+                                        {new Date(client.createDate).toLocaleDateString('ru-RU')}
+                                    </div>
                                 </td>
                                 {steps.map((step, i) => (
                                     <td
