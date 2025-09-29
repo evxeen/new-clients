@@ -137,3 +137,179 @@
   }
 }
 
+.dateFilterContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dateFilterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f0f2f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  font-size: 14px;
+  height: 40px;
+
+  &:hover {
+    background: #e2e6ea;
+  }
+
+  &.activeFilter {
+    border-color: #3182ce;
+    background: rgba(49, 130, 206, 0.1);
+    color: #3182ce;
+  }
+}
+
+.dateFilterPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 100;
+  margin-top: 5px;
+  min-width: 280px;
+}
+
+.dateInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dateInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  label {
+    font-weight: 500;
+    color: #333;
+    min-width: 30px;
+  }
+
+  input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    flex-grow: 1;
+
+    &:focus {
+      outline: none;
+      border-color: #3182ce;
+    }
+  }
+}
+
+.dateFilterActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resetDateButton {
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+
+  &:hover:not(:disabled) {
+    background: #e9ecef;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.resetAllButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  height: 40px;
+
+  &:hover:not(:disabled) {
+    background: #e9ecef;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.createDate {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+// Адаптивные стили для фильтров
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dateFilterPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .dateInputs {
+    flex-direction: column;
+  }
+
+  .dateInputGroup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    input {
+      width: 100%;
+    }
+  }
+}
+
+// Стили для статусов клиентов
+.marriage {
+  border-left: 4px solid #f87171;
+}
+
+.potential {
+  border-left: 4px solid #f6ad55;
+}
+
+.active {
+  border-left: 4px solid #48bb78;
+}
