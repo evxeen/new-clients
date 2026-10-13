@@ -1313,3 +1313,66 @@
     justify-content: center;
   }
 }
+
+.managerFilterContainer {
+  position: relative;
+}
+
+.managerFilterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f0f2f5;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  color: $text-medium;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  font-size: 14px;
+  height: 40px;
+
+  &:hover {
+    background: #e2e6ea;
+  }
+
+  &.activeFilter {
+    border-color: $accent-color;
+    background: rgba($accent-color, 0.1);
+    color: $accent-color;
+  }
+}
+
+.managerFilterContainer {
+  position: relative;
+}
+
+.managerFilterPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;           // <-- гарантирует поверх всех блоков
+  background: #fff;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+
+  input[type="checkbox"] {
+    margin: 0;
+  }
+}

@@ -50,13 +50,12 @@
     justify-content: space-around;
     flex-wrap: wrap;
 
-
     .clientBlock {
       width: 100%;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       transition: transform 0.3s ease;
-      margin:20px;
+      margin: 20px;
       text-decoration: none;
       color: inherit;
 
@@ -85,13 +84,12 @@
         font-size: 22px;
       }
 
-      p, a {
+      p,
+      a {
         padding-left: 20px;
       }
     }
-
   }
-
 }
 
 .funnelButton {
@@ -312,4 +310,157 @@
 
 .active {
   border-left: 4px solid #48bb78;
+}
+
+.managerFilterContainer {
+  position: relative;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f0f2f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  font-size: 14px;
+  height: 40px;
+
+  &:hover {
+    background: #e2e6ea;
+  }
+
+  &.activeFilter {
+    border-color: #3182ce;
+    background: rgba(49, 130, 206, 0.1);
+    color: #3182ce;
+  }
+}
+
+.managerFilterPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+
+  input[type='checkbox'] {
+    margin: 0;
+  }
+}
+
+.notificationButton {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.notificationIcon {
+  width: 22px;
+  height: 22px;
+
+  color: currentColor;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+
+  box-sizing: border-box;
+
+  border-radius: 20px;
+
+  background: #e53935;
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.clientsCount {
+  width: 75%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+
+  margin: 0 0 12px;
+
+  font-size: 15px;
+  color: #555;
+}
+
+.clientsCountValue {
+  padding: 0;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  filter: blur(5px);
+  user-select: none;
+
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: blur(3px);
+  }
+}
+
+.clientsCountValue.visible {
+  filter: blur(0);
+  user-select: text;
 }

@@ -425,19 +425,7 @@ function EditClientPage() {
 
                     <div className={`${styles.field} ${styles.manager}`}>
                         <label>Ответственный менеджер:</label>
-                        <select name="manager" value={client.manager || ''} onChange={handleChange}>
-                            <option value="" disabled>Выберите</option>
-                            <option value="Капуза Виктор">Капуза Виктор</option>
-                            <option value="Петоченко Светлана">Петоченко Светлана</option>
-                            <option value="Кучерина Ольга">Кучерина Ольга</option>
-                            <option value="Ковальчук Наталья">Ковальчук Наталья</option>
-                            <option value="Кострома Наталья">Кострома Наталья</option>
-                            <option value="Зайцева Татьяна">Зайцева Татьяна</option>
-                            <option value="Тямчик Татьяна">Тямчик Татьяна</option>
-                            <option value="Лобан Елена">Лобан Елена</option>
-                            <option value="Кузьменок Татьяна">Лобан Елена</option>
-                            <option value="Лысенко Евгений">Лысенко Евгений</option>
-                        </select>
+                        <p>{client.manager}</p>
                     </div>
 
                 </div>

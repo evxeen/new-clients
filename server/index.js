@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
-const authRoutes = require("./routes/auth.js");
+const authRoutes = require('./routes/auth.js');
 
 // Конфигурация
 const config = require('./config');
@@ -11,28 +11,30 @@ const PORT = config.PORT;
 
 // Маршруты
 const clientRoutes = require('./routes/clientRoutes');
+const reminderRoutes = require('./routes/reminderRoutes');
 
 // Мидлвары
 app.use(cors());
 app.use(express.json());
 
-
-app.use("/api/auth", authRoutes);
+app.use('/api/auth', authRoutes);
 
 // API Routes
 app.use('/api/clients', clientRoutes);
+
+app.use('/api/reminders', reminderRoutes);
 
 // Статическая отдача клиента
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // SPA Fallback
 app.get(/\/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 // Запуск сервера
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Сервер запущен на http://localhost:${PORT}`);
+  console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
 
 // app.listen(PORT, '127.0.0.1', () => {
